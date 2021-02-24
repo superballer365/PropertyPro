@@ -11,6 +11,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <button onClick={() => Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google })}>Sign in with Google</button>
         <button onClick={() => Auth.federatedSignIn()}>Sign in</button>
+        <button onClick={() => Auth.signOut()}>Sign out</button>
       </header>
     </div>
   );
