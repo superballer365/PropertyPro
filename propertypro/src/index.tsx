@@ -11,7 +11,9 @@ Initialize();
 ReactDOM.render(
   <React.StrictMode>
     <AuthorizationContextProvider>
-      <App />
+      <div className="mainContainer">
+        <App />
+      </div>
     </AuthorizationContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
