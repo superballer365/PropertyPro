@@ -1,5 +1,4 @@
 import React from 'react';
-import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib-esm/types"
 import logo from './logo.svg';
 import './App.css';
 import { AuthorizationContext } from './Contexts/AuthorizationContext';
