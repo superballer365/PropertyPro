@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Initialize from './Initialize';
+import AuthorizationContextProvider from './Contexts/AuthorizationContext';
 
 Initialize();
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthorizationContextProvider>
+      <App />
+    </AuthorizationContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
