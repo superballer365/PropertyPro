@@ -1,36 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, BrowserRouter as Router } from "react-router-dom";
 import { AuthorizationContext } from './Contexts/AuthorizationContext';
+import './App.css';
+import SigningIn from './Pages/SigningIn';
+import Landing from './Pages/Landing';
+import Home from './Pages/Home';
 
 function App() {
-  const { user, loadingUser, signIn, signOut } = React.useContext(AuthorizationContext);
+  const { user, loadingUser } = React.useContext(AuthorizationContext);
 
   console.log("user");
   console.log(user);
 
-  function getContent() {
-    if (loadingUser) {
-      return <div>loading user...</div>
-    } else if (!user) {
-      return <button onClick={() => signIn()}>Sign in with Google</button>
-    } else {
-      return (
-        <>
-          <p>Hello {user?.signInUserSession?.idToken?.payload?.email}</p>
-          <button onClick={() => signOut()}>Sign out</button>
-        </>
-      )
-    }
+  function getBaseComponent() {
+    if (loadingUser) return SigningIn;
+    else if (!user) return Landing;
+    else return Home;
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {getContent()}
-      </header>
-    </div>
+    <Router>
+      <Route path="/" exact component={getBaseComponent()} />
+    </Router>
   );
 }
 
