@@ -3,11 +3,11 @@ import { Route, BrowserRouter as Router } from "react-router-dom";
 import { AuthorizationContext } from "./Contexts/AuthorizationContext";
 import "./App.css";
 import SigningIn from "./Pages/SigningIn";
-import Landing from "./Pages/Landing";
-import Home from "./Pages/Home";
+import LandingPage from "./Pages/LandingPage";
+import HomePage from "./Pages/HomePage";
 import { withHeader } from "./Components/Header/Header";
-import Settings from "./Pages/Settings";
-import About from "./Pages/About";
+import SettingsPage from "./Pages/SettingsPage";
+import AboutPage from "./Pages/AboutPage";
 
 function App() {
   const { user, loadingUser } = React.useContext(AuthorizationContext);
@@ -17,15 +17,15 @@ function App() {
 
   function getBaseComponent() {
     if (loadingUser) return SigningIn;
-    else if (!user) return Landing;
-    else return withHeader(Home);
+    else if (!user) return LandingPage;
+    else return withHeader(HomePage);
   }
 
   return (
     <Router>
       <Route path="/" exact component={getBaseComponent()} />
-      <Route path="/Settings" component={withHeader(Settings)} />
-      <Route path="/About" component={withHeader(About)} />
+      <Route path="/Settings" component={withHeader(SettingsPage)} />
+      <Route path="/About" component={withHeader(AboutPage)} />
     </Router>
   );
 }

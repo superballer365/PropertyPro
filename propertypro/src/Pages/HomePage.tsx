@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import { AuthorizationContext } from "../Contexts/AuthorizationContext";
 
-export default function Home() {
+export default function HomePage() {
   const { user } = React.useContext(AuthorizationContext);
 
   return (

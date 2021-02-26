@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { AuthorizationContext } from "../Contexts/AuthorizationContext";
 
-export default function Landing() {
+export default function LandingPage() {
   const { signIn } = React.useContext(AuthorizationContext);
 
   return (
