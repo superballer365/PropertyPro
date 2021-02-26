@@ -2,7 +2,7 @@ import React from "react";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import { AuthorizationContext } from "./Contexts/AuthorizationContext";
 import "./App.css";
-import SigningIn from "./Pages/SigningIn";
+import LoadingPage from "./Pages/LoadingPage";
 import LandingPage from "./Pages/LandingPage";
 import HomePage from "./Pages/HomePage";
 import { withHeader } from "./Components/Header/Header";
@@ -16,7 +16,7 @@ function App() {
   console.log(user);
 
   function getBaseComponent() {
-    if (loadingUser) return SigningIn;
+    if (loadingUser) return () => <LoadingPage text="signing in..." />;
     else if (!user) return LandingPage;
     else return withHeader(HomePage);
   }
