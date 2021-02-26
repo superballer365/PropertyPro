@@ -6,6 +6,8 @@ import SigningIn from "./Pages/SigningIn";
 import Landing from "./Pages/Landing";
 import Home from "./Pages/Home";
 import { withHeader } from "./Components/Header/Header";
+import Settings from "./Pages/Settings";
+import About from "./Pages/About";
 
 function App() {
   const { user, loadingUser } = React.useContext(AuthorizationContext);
@@ -22,6 +24,8 @@ function App() {
   return (
     <Router>
       <Route path="/" exact component={getBaseComponent()} />
+      <Route path="/Settings" component={withHeader(Settings)} />
+      <Route path="/About" component={withHeader(About)} />
     </Router>
   );
 }
