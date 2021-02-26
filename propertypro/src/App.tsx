@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
 import { Route, BrowserRouter as Router } from "react-router-dom";
-import { AuthorizationContext } from './Contexts/AuthorizationContext';
-import './App.css';
-import SigningIn from './Pages/SigningIn';
-import Landing from './Pages/Landing';
-import Home from './Pages/Home';
+import { AuthorizationContext } from "./Contexts/AuthorizationContext";
+import "./App.css";
+import SigningIn from "./Pages/SigningIn";
+import Landing from "./Pages/Landing";
+import Home from "./Pages/Home";
+import { withHeader } from "./Components/Header/Header";
 
 function App() {
   const { user, loadingUser } = React.useContext(AuthorizationContext);
@@ -15,7 +16,7 @@ function App() {
   function getBaseComponent() {
     if (loadingUser) return SigningIn;
     else if (!user) return Landing;
-    else return Home;
+    else return withHeader(Home);
   }
 
   return (
