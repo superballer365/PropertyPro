@@ -1,0 +1,4 @@
+type Session @model {
+  id: ID!
+  name: String!
+}
