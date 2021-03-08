@@ -3,6 +3,7 @@ import { listSessions } from "../../graphql/queries";
 import SessionData, { mapListSessions } from "../../Models/Session";
 import callGraphQL from "../../graphql/callGraphQL";
 import { ListSessionsQuery } from "../../API";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export default function ExistingSessions() {
   const [loadingSessions, setLoadingSessions] = React.useState(false);
@@ -27,7 +28,7 @@ export default function ExistingSessions() {
     };
   }, []);
 
-  if (loadingSessions) return <div>Loading sessions...</div>;
+  if (loadingSessions) return <LoadingSpinner text="Loading sessions..." />;
   else if (existingSessions.length > 0)
     return <div>You have some sessions</div>;
   else return <div>No existing sessions</div>;
