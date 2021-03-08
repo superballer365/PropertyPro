@@ -5,7 +5,7 @@ import callGraphQL from "../../graphql/callGraphQL";
 import { ListSessionsQuery } from "../../API";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
-export default function ExistingSessions() {
+export default function ExistingSessionsSection() {
   const [loadingSessions, setLoadingSessions] = React.useState(false);
   const [existingSessions, setExistingSessions] = React.useState<SessionData[]>(
     []

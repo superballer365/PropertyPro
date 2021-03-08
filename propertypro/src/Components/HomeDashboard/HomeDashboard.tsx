@@ -1,11 +1,12 @@
 import React from "react";
-import ExistingSessions from "./ExistingSessions";
+import ExistingSessionsSection from "./ExistingSessionsSection";
+import NewSessionSection from "./NewSessionSection";
 
 export default function HomeDashboard() {
   return (
     <div>
-      Home Dashboard
-      <ExistingSessions />
+      <NewSessionSection />
+      <ExistingSessionsSection />
     </div>
   );
 }
