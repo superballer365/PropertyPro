@@ -4,6 +4,7 @@ import SessionData, { mapListSessions } from "../../Models/Session";
 import callGraphQL from "../../graphql/callGraphQL";
 import { ListSessionsQuery } from "../../API";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import Card from "react-bootstrap/Card";
 
 export default function ExistingSessionsSection() {
   const [loadingSessions, setLoadingSessions] = React.useState(false);
@@ -28,8 +29,17 @@ export default function ExistingSessionsSection() {
     };
   }, []);
 
-  if (loadingSessions) return <LoadingSpinner text="Loading sessions..." />;
-  else if (existingSessions.length > 0)
-    return <div>You have some sessions</div>;
-  else return <div>No existing sessions</div>;
+  function getContent() {
+    if (loadingSessions) return <LoadingSpinner text="Loading sessions..." />;
+    else if (existingSessions.length > 0)
+      return <div>You have some sessions</div>;
+    else return <div>No existing sessions</div>;
+  }
+
+  return (
+    <Card>
+      <Card.Header>My Sessions</Card.Header>
+      <Card.Body>{getContent()}</Card.Body>
+    </Card>
+  );
 }
