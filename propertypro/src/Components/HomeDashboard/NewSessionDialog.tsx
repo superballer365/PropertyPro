@@ -12,10 +12,22 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
   });
 
   function handleCreateClick(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+
     const errors = validateFormData(formData);
     setFormDataErrors(errors);
+    if (!hasErrors(errors)) handleClose();
+  }
 
-    if (!hasErrors(errors)) onClose();
+  function handleClose() {
+    onClose();
+    resetForm();
+  }
+
+  function resetForm() {
+    setFormData({ name: "" });
+    setFormDataErrors({ nameError: undefined });
   }
 
   return (
@@ -36,11 +48,14 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
               }
               isInvalid={!!formDataErrors.nameError}
             />
+            <Form.Control.Feedback type="invalid">
+              {formDataErrors.nameError}
+            </Form.Control.Feedback>
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button variant="primary" onClick={handleCreateClick}>
