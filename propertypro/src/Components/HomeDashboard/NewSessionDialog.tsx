@@ -43,8 +43,7 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="name"
-              placeholder="New Session Name"
-              value={formData.name}
+              value={formData.name ?? ""}
               onChange={(event: any) =>
                 setFormData((prev) => ({ ...prev, name: event.target.value }))
               }
