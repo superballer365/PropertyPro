@@ -4,12 +4,19 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
-  const [formData, setFormData] = React.useState<CreateSessionFormData>({
-    name: "",
-  });
-  const [formDataErrors, setFormDataErrors] = React.useState<FormDataError>({
-    nameError: undefined,
-  });
+  const [formData, setFormData] = React.useState<CreateSessionFormData>(
+    DEFAULT_FORM_DATA
+  );
+  const [formDataErrors, setFormDataErrors] = React.useState<FormDataErrors>(
+    DEFAULT_DATA_ERRORS
+  );
+
+  React.useEffect(() => {
+    // reset on open
+    if (open) {
+      resetForm();
+    }
+  }, [open]);
 
   function handleCreateClick(event: any) {
     event.preventDefault();
@@ -17,17 +24,12 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
 
     const errors = validateFormData(formData);
     setFormDataErrors(errors);
-    if (!hasErrors(errors)) handleClose();
-  }
-
-  function handleClose() {
-    onClose();
-    resetForm();
+    if (!hasErrors(errors)) onClose();
   }
 
   function resetForm() {
-    setFormData({ name: "" });
-    setFormDataErrors({ nameError: undefined });
+    setFormData(DEFAULT_FORM_DATA);
+    setFormDataErrors(DEFAULT_DATA_ERRORS);
   }
 
   return (
@@ -55,7 +57,7 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
         <Button variant="primary" onClick={handleCreateClick}>
@@ -75,11 +77,19 @@ interface CreateSessionFormData {
   name?: string;
 }
 
-interface FormDataError {
+const DEFAULT_FORM_DATA: CreateSessionFormData = {
+  name: undefined,
+};
+
+interface FormDataErrors {
   nameError?: string;
 }
 
-function validateFormData(formData: CreateSessionFormData): FormDataError {
+const DEFAULT_DATA_ERRORS: FormDataErrors = {
+  nameError: undefined,
+};
+
+function validateFormData(formData: CreateSessionFormData): FormDataErrors {
   let nameError;
 
   if (!formData.name) {
@@ -91,7 +101,7 @@ function validateFormData(formData: CreateSessionFormData): FormDataError {
   };
 }
 
-function hasErrors(formDataError: FormDataError) {
+function hasErrors(formDataError: FormDataErrors) {
   let errorFound = false;
 
   let key: keyof typeof formDataError;
