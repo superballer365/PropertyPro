@@ -26,13 +26,19 @@ export default function AuthorizationContextProvider({
   children: JSX.Element;
 }) {
   const [user, setUser] = React.useState<any>();
-  const [loadingUser, setLoadingUser] = React.useState(false);
+  const [loadingUser, setLoadingUser] = React.useState(true);
+
+  React.useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then((user) => setUser(user))
+      .catch(() => console.log("Not signed in"))
+      .finally(() => setLoadingUser(false));
+  }, []);
 
   React.useEffect(() => {
     Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
-          setLoadingUser(true);
           setUser(data);
           break;
         case "signOut":
@@ -40,14 +46,10 @@ export default function AuthorizationContextProvider({
           break;
       }
     });
-
-    Auth.currentAuthenticatedUser()
-      .then((user) => setUser(user))
-      .catch(() => console.log("Not signed in"))
-      .finally(() => setLoadingUser(false));
   }, []);
 
   const handleSignIn = React.useCallback(() => {
+    setLoadingUser(true);
     Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
   }, []);
 
