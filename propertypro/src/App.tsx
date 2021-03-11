@@ -8,6 +8,7 @@ import HomePage from "./Pages/HomePage";
 import { withHeader } from "./Components/Header/Header";
 import SettingsPage from "./Pages/SettingsPage";
 import AboutPage from "./Pages/AboutPage";
+import SessionContextProvider from "./Contexts/SessionContext";
 
 function App() {
   const { user, loadingUser } = React.useContext(AuthorizationContext);
@@ -15,19 +16,29 @@ function App() {
   console.log("user");
   console.log(user);
 
-  function getBaseComponent() {
-    if (loadingUser) return () => <LoadingPage text="signing in..." />;
-    else if (!user) return LandingPage;
-    else return withHeader(HomePage);
+  function getRoutes() {
+    if (loadingUser)
+      return (
+        <Route
+          path="/"
+          component={() => <LoadingPage text="signing in..." />}
+        />
+      );
+    else if (!user) return <Route path="/" component={LandingPage} />;
+    else {
+      return (
+        <SessionContextProvider>
+          <>
+            <Route path="/" exact component={withHeader(HomePage)} />
+            <Route path="/Settings" component={withHeader(SettingsPage)} />
+            <Route path="/About" component={withHeader(AboutPage)} />
+          </>
+        </SessionContextProvider>
+      );
+    }
   }
 
-  return (
-    <Router>
-      <Route path="/" exact component={getBaseComponent()} />
-      <Route path="/Settings" component={withHeader(SettingsPage)} />
-      <Route path="/About" component={withHeader(AboutPage)} />
-    </Router>
-  );
+  return <Router>{getRoutes()}</Router>;
 }
 
 export default App;
