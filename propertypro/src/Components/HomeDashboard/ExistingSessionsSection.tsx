@@ -18,7 +18,7 @@ export default function ExistingSessionsSection() {
       return (
         <div>
           {existingSessions.map((session) => (
-            <SessionEntry sessionData={session} />
+            <SessionEntry key={session.id} sessionData={session} />
           ))}
         </div>
       );

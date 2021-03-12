@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import { SessionContext } from "../../Contexts/SessionContext";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
-  const { createSession } = React.useContext(SessionContext);
+  const { createSession, markDirty } = React.useContext(SessionContext);
   const [formData, setFormData] = React.useState<CreateSessionFormData>(
     DEFAULT_FORM_DATA
   );
@@ -28,8 +28,8 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
       const created = await createSession({ name: formData.name! });
-      if (created) console.log("created session!");
-      else console.log("Failed to create session!");
+      if (created) markDirty();
+      else console.log("Failed to create session!"); // should throw toast here in the future
       onClose();
     }
   }
