@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "react-bootstrap/Card";
 import { SessionContext } from "../../Contexts/SessionContext";
@@ -40,6 +41,8 @@ function SessionEntry({ sessionData }: ISessionEntryProps) {
   const { deleteSession, markDirty } = React.useContext(SessionContext);
   const [deletingSession, setDeletingSession] = React.useState(false);
 
+  const history = useHistory();
+
   async function handleDeleteClick() {
     if (deletingSession) return;
 
@@ -55,13 +58,19 @@ function SessionEntry({ sessionData }: ISessionEntryProps) {
     }
   }
 
+  function handleOpenClick() {
+    history.push(`/Session/${sessionData.id!}`);
+  }
+
   return (
     <Card>
       <Card.Body>
         <div className="d-flex justify-content-between">
           <div>{sessionData.name}</div>
           <div>
-            <Button variant="primary">Open</Button>{" "}
+            <Button variant="primary" onClick={handleOpenClick}>
+              Open
+            </Button>{" "}
             <Button variant="danger" onClick={handleDeleteClick}>
               {deletingSession ? (
                 <Spinner animation="border" variant="primary" size="sm" />
