@@ -4,6 +4,8 @@ import Card from "react-bootstrap/Card";
 import { SessionContext } from "../../Contexts/SessionContext";
 import SessionData from "../../Models/Session";
 import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 export default function ExistingSessionsSection() {
   const { sessions: existingSessions, loadingSessions } = React.useContext(
@@ -38,12 +40,14 @@ interface ISessionEntryProps {
 function SessionEntry({ sessionData }: ISessionEntryProps) {
   return (
     <Card>
-      <Card.Body className="d-flex flex-row">
-        <div className="justify-content-start">{sessionData.name}</div>
-        <div className="justify-content-end">
-          <Button>Open</Button>
-          <Button>Delete</Button>
-        </div>
+      <Card.Body>
+        <Row>
+          <Col>{sessionData.name}</Col>
+          <Col>
+            <Button variant="primary">Open</Button>{" "}
+            <Button variant="danger">Delete</Button>
+          </Col>
+        </Row>
       </Card.Body>
     </Card>
   );
