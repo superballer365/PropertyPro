@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../Components/LoadingSpinner/LoadingSpinner";
+import SessionViewerDashboard from "../Components/SessionViewerDashboard/SessionViewerDashboard";
 import { SessionContext } from "../Contexts/SessionContext";
 import ErrorPage from "./ErrorPage";
 
@@ -40,5 +41,5 @@ export default function SessionViewerPage() {
     return (
       <ErrorPage text="Could not find a session matching the specified id." />
     );
-  else return <div>{`Session: ${selectedSession?.id}`}</div>;
+  else return <SessionViewerDashboard session={selectedSession!} />;
 }
