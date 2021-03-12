@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  CreateSessionInput,
   CreateSessionMutation,
   DeleteSessionMutation,
   ListSessionsQuery,
@@ -14,16 +13,20 @@ import SessionData, {
 } from "../Models/Session";
 
 interface ISessionContextState {
+  selectedSession?: SessionData;
   sessions: SessionData[];
   loadingSessions: boolean;
+  setSelectedSession: (session: SessionData) => void;
   createSession: (newSession: SessionData) => Promise<boolean>;
   deleteSession: (sessionId: string) => Promise<boolean>;
   markDirty: () => void;
 }
 
 const defaultState: ISessionContextState = {
+  selectedSession: undefined,
   sessions: [],
   loadingSessions: false,
+  setSelectedSession: () => {},
   createSession: () => Promise.resolve(false),
   deleteSession: () => Promise.resolve(false),
   markDirty: () => {},
@@ -38,6 +41,7 @@ export default function SessionContextProvider({
 }: {
   children: JSX.Element;
 }) {
+  const [selectedSession, setSelectedSession] = React.useState<SessionData>();
   const [sessions, setSessions] = React.useState<SessionData[]>([]);
   const [loadingSessions, setLoadingSessions] = React.useState(false);
   const [isDirty, setIsDirty] = React.useState(true);
@@ -110,13 +114,16 @@ export default function SessionContextProvider({
 
   const state = React.useMemo<ISessionContextState>(
     () => ({
+      selectedSession,
       sessions,
       loadingSessions,
+      setSelectedSession,
       markDirty: markDirtyHandler,
       createSession: createSessionHandler,
       deleteSession: deleteSessionHandler,
     }),
     [
+      selectedSession,
       sessions,
       loadingSessions,
       markDirtyHandler,
