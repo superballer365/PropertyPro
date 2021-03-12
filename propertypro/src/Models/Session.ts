@@ -1,9 +1,15 @@
-import { ListSessionsQuery } from "../API";
+import { CreateSessionInput, ListSessionsQuery } from "../API";
 import { GraphQLResult } from "@aws-amplify/api";
 
 interface SessionData {
   id?: string;
-  name?: string;
+  name: string;
+}
+
+export function sessionDataToCreateSessionInput(
+  sessionData: SessionData
+): CreateSessionInput {
+  return { name: sessionData.name, id: sessionData.id };
 }
 
 function mapListSessionsQuery(

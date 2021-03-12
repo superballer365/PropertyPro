@@ -1,8 +1,16 @@
 import React from "react";
-import { ListSessionsQuery } from "../API";
+import {
+  CreateSessionInput,
+  CreateSessionMutation,
+  ListSessionsQuery,
+} from "../API";
 import callGraphQL from "../graphql/callGraphQL";
+import { createSession } from "../graphql/mutations";
 import { listSessions } from "../graphql/queries";
-import SessionData, { mapListSessions } from "../Models/Session";
+import SessionData, {
+  mapListSessions,
+  sessionDataToCreateSessionInput,
+} from "../Models/Session";
 
 interface ISessionContextState {
   sessions: SessionData[];
@@ -31,9 +39,28 @@ export default function SessionContextProvider({
   const [loadingSessions, setLoadingSessions] = React.useState(false);
   const [isDirty, setIsDirty] = React.useState(true);
 
-  const createSessionHandler = React.useCallback(async () => {
-    return await Promise.resolve(false);
-  }, []);
+  const createSessionHandler = React.useCallback(
+    async (newSession: SessionData) => {
+      try {
+        const createSessionInput = sessionDataToCreateSessionInput(newSession);
+        const response = await callGraphQL<CreateSessionMutation>(
+          createSession,
+          {
+            input: createSessionInput,
+          }
+        );
+        if (!!response.errors) {
+          console.error("Failed to create session: " + response.errors);
+          return false;
+        } else {
+          return true;
+        }
+      } catch (err) {
+        return false;
+      }
+    },
+    []
+  );
 
   const markDirtyHandler = React.useCallback(() => {
     setIsDirty(true);

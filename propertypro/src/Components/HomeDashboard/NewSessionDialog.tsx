@@ -2,8 +2,10 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { SessionContext } from "../../Contexts/SessionContext";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
+  const { createSession } = React.useContext(SessionContext);
   const [formData, setFormData] = React.useState<CreateSessionFormData>(
     DEFAULT_FORM_DATA
   );
@@ -18,13 +20,18 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
     }
   }, [open]);
 
-  function handleCreateClick(event: any) {
+  async function handleCreateClick(event: any) {
     event.preventDefault();
     event.stopPropagation();
 
     const errors = validateFormData(formData);
     setFormDataErrors(errors);
-    if (!hasErrors(errors)) onClose();
+    if (!hasErrors(errors)) {
+      const created = await createSession({ name: formData.name! });
+      if (created) console.log("created session!");
+      else console.log("Failed to create session!");
+      onClose();
+    }
   }
 
   function resetForm() {
