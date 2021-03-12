@@ -4,8 +4,7 @@ import Card from "react-bootstrap/Card";
 import { SessionContext } from "../../Contexts/SessionContext";
 import SessionData from "../../Models/Session";
 import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import Spinner from "react-bootstrap/Spinner";
 
 export default function ExistingSessionsSection() {
   const { sessions: existingSessions, loadingSessions } = React.useContext(
@@ -38,6 +37,24 @@ interface ISessionEntryProps {
 }
 
 function SessionEntry({ sessionData }: ISessionEntryProps) {
+  const { deleteSession, markDirty } = React.useContext(SessionContext);
+  const [deletingSession, setDeletingSession] = React.useState(false);
+
+  async function handleDeleteClick() {
+    if (deletingSession) return;
+
+    setDeletingSession(true);
+    const deleted = await deleteSession(sessionData.id!);
+    setDeletingSession(false);
+
+    if (deleted) {
+      markDirty();
+    } else {
+      // should throw toast
+      console.log("Failed to delete session!");
+    }
+  }
+
   return (
     <Card>
       <Card.Body>
@@ -45,7 +62,13 @@ function SessionEntry({ sessionData }: ISessionEntryProps) {
           <div>{sessionData.name}</div>
           <div>
             <Button variant="primary">Open</Button>{" "}
-            <Button variant="danger">Delete</Button>
+            <Button variant="danger" onClick={handleDeleteClick}>
+              {deletingSession ? (
+                <Spinner animation="border" variant="primary" size="sm" />
+              ) : (
+                "Delete"
+              )}
+            </Button>
           </div>
         </div>
       </Card.Body>

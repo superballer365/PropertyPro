@@ -2,10 +2,11 @@ import React from "react";
 import {
   CreateSessionInput,
   CreateSessionMutation,
+  DeleteSessionMutation,
   ListSessionsQuery,
 } from "../API";
 import callGraphQL from "../graphql/callGraphQL";
-import { createSession } from "../graphql/mutations";
+import { createSession, deleteSession } from "../graphql/mutations";
 import { listSessions } from "../graphql/queries";
 import SessionData, {
   mapListSessions,
@@ -16,6 +17,7 @@ interface ISessionContextState {
   sessions: SessionData[];
   loadingSessions: boolean;
   createSession: (newSession: SessionData) => Promise<boolean>;
+  deleteSession: (sessionId: string) => Promise<boolean>;
   markDirty: () => void;
 }
 
@@ -23,6 +25,7 @@ const defaultState: ISessionContextState = {
   sessions: [],
   loadingSessions: false,
   createSession: () => Promise.resolve(false),
+  deleteSession: () => Promise.resolve(false),
   markDirty: () => {},
 };
 
@@ -62,6 +65,22 @@ export default function SessionContextProvider({
     []
   );
 
+  const deleteSessionHandler = React.useCallback(async (sessionId: string) => {
+    try {
+      const response = await callGraphQL<DeleteSessionMutation>(deleteSession, {
+        input: { id: sessionId },
+      });
+      if (!!response.errors) {
+        console.error("Failed to delete session: " + response.errors);
+        return false;
+      } else {
+        return true;
+      }
+    } catch (err) {
+      return false;
+    }
+  }, []);
+
   const markDirtyHandler = React.useCallback(() => {
     setIsDirty(true);
   }, []);
@@ -95,8 +114,15 @@ export default function SessionContextProvider({
       loadingSessions,
       markDirty: markDirtyHandler,
       createSession: createSessionHandler,
+      deleteSession: deleteSessionHandler,
     }),
-    [sessions, loadingSessions, markDirtyHandler, createSessionHandler]
+    [
+      sessions,
+      loadingSessions,
+      markDirtyHandler,
+      createSessionHandler,
+      deleteSessionHandler,
+    ]
   );
 
   return (
