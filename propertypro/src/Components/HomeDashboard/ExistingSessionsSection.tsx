@@ -41,13 +41,13 @@ function SessionEntry({ sessionData }: ISessionEntryProps) {
   return (
     <Card>
       <Card.Body>
-        <Row>
-          <Col>{sessionData.name}</Col>
-          <Col>
+        <div className="d-flex justify-content-between">
+          <div>{sessionData.name}</div>
+          <div>
             <Button variant="primary">Open</Button>{" "}
             <Button variant="danger">Delete</Button>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Card.Body>
     </Card>
   );
