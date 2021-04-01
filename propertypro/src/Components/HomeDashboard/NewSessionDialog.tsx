@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { Typeahead } from "react-bootstrap-typeahead";
 import { SessionContext } from "../../Contexts/SessionContext";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
@@ -56,6 +57,13 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
               }
               isInvalid={!!formDataErrors.nameError}
             />
+            <Form.Control.Feedback type="invalid">
+              {formDataErrors.nameError}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group controlId="exampleForm.ControlInput1">
+            <Form.Label>Search City</Form.Label>
+            <Typeahead options={["hello", "goodbye"]} />
             <Form.Control.Feedback type="invalid">
               {formDataErrors.nameError}
             </Form.Control.Feedback>
