@@ -47,7 +47,7 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="exampleForm.ControlInput1">
+          <Form.Group controlId="sessionForm.Name">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="name"
@@ -61,9 +61,19 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
               {formDataErrors.nameError}
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group controlId="exampleForm.ControlInput1">
+          <Form.Group controlId="sessionForm.SearchCity">
             <Form.Label>Search City</Form.Label>
-            <Typeahead options={["hello", "goodbye"]} />
+            <Typeahead
+              options={["hello", "goodbye"]}
+              isInvalid={!!formDataErrors.searchCityError}
+              onChange={(value: any) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  searchCity: value,
+                }));
+              }}
+              multiple={false}
+            />
             <Form.Control.Feedback type="invalid">
               {formDataErrors.nameError}
             </Form.Control.Feedback>
@@ -89,6 +99,7 @@ interface IProps {
 
 interface CreateSessionFormData {
   name?: string;
+  searchCity?: string;
 }
 
 const DEFAULT_FORM_DATA: CreateSessionFormData = {
@@ -97,21 +108,29 @@ const DEFAULT_FORM_DATA: CreateSessionFormData = {
 
 interface FormDataErrors {
   nameError?: string;
+  searchCityError?: string;
 }
 
 const DEFAULT_DATA_ERRORS: FormDataErrors = {
   nameError: undefined,
+  searchCityError: undefined,
 };
 
 function validateFormData(formData: CreateSessionFormData): FormDataErrors {
   let nameError;
+  let searchCityError;
 
   if (!formData.name) {
     nameError = "Must provide name for session";
   }
+  if (!formData.searchCity) {
+    console.log("search city error");
+    searchCityError = "Must enter a search city";
+  }
 
   return {
     nameError,
+    searchCityError,
   };
 }
 
