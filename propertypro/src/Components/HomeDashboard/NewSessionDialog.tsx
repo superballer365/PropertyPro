@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { SessionContext } from "../../Contexts/SessionContext";
+import { googlePlacesAutoComplete, SearchType } from "../../API/Google Places";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
   const { createSession, markDirty } = React.useContext(SessionContext);
@@ -33,6 +34,13 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
       else console.log("Failed to create session!"); // should throw toast here in the future
       onClose();
     }
+  }
+
+  async function handleTestButtonClick() {
+    const searchText = "Bosto";
+
+    const result = await googlePlacesAutoComplete(searchText, SearchType.City);
+    console.log(result);
   }
 
   function resetForm() {
@@ -86,6 +94,9 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
         </Button>
         <Button variant="primary" onClick={handleCreateClick}>
           Create
+        </Button>
+        <Button variant="primary" onClick={handleTestButtonClick}>
+          Test Search
         </Button>
       </Modal.Footer>
     </Modal>
