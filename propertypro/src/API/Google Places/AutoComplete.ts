@@ -2,7 +2,7 @@ import { appendGoogleAPIKeyToUrl, SearchType } from ".";
 import axios from "axios";
 
 const googlePlacesAutoCompleteBaseURL =
-  "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+  "https://thingproxy.freeboard.io/fetch/https://maps.googleapis.com/maps/api/place/autocomplete/json";
 
 export async function googlePlacesAutoComplete(
   searchText: string,
