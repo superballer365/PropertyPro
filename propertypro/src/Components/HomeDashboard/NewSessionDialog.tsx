@@ -2,9 +2,9 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { Typeahead } from "react-bootstrap-typeahead";
 import { SessionContext } from "../../Contexts/SessionContext";
-import { googlePlacesAutoComplete, SearchType } from "../../API/Google Places";
+import { AutoCompleteSuggestion } from "../../API/Google Places";
+import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
   const { createSession, markDirty } = React.useContext(SessionContext);
@@ -36,13 +36,6 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
     }
   }
 
-  async function handleTestButtonClick() {
-    const searchText = "Bosto";
-
-    const result = await googlePlacesAutoComplete(searchText, SearchType.City);
-    console.log(result);
-  }
-
   function resetForm() {
     setFormData(DEFAULT_FORM_DATA);
     setFormDataErrors(DEFAULT_DATA_ERRORS);
@@ -58,7 +51,7 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
           <Form.Group controlId="sessionForm.Name">
             <Form.Label>Name</Form.Label>
             <Form.Control
-              type="name"
+              type="session name"
               value={formData.name ?? ""}
               onChange={(event: any) =>
                 setFormData((prev) => ({ ...prev, name: event.target.value }))
@@ -71,16 +64,14 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
           </Form.Group>
           <Form.Group controlId="sessionForm.SearchCity">
             <Form.Label>Search City</Form.Label>
-            <Typeahead
-              options={["hello", "goodbye"]}
-              isInvalid={!!formDataErrors.searchCityError}
-              onChange={(value: any) => {
+            <AddressSearchBar
+              onSelect={(value: AutoCompleteSuggestion) => {
                 setFormData((prev) => ({
                   ...prev,
-                  searchCity: value,
+                  searchCity: value.name,
                 }));
               }}
-              multiple={false}
+              isInvalid={!!formDataErrors.searchCityError}
             />
             <Form.Control.Feedback type="invalid">
               {formDataErrors.nameError}
@@ -94,9 +85,6 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
         </Button>
         <Button variant="primary" onClick={handleCreateClick}>
           Create
-        </Button>
-        <Button variant="primary" onClick={handleTestButtonClick}>
-          Test Search
         </Button>
       </Modal.Footer>
     </Modal>
