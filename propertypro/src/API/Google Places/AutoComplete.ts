@@ -1,35 +1,53 @@
-import { appendGoogleAPIKeyToUrl, SearchType } from ".";
-import axios from "axios";
+import { SearchType } from ".";
 
-// const corsProxyPrefix = `https://thingproxy.freeboard.io/fetch/`
-// const corsProxyPrefix = `http://alloworigin.com/get?url=`;
-// const corsProxyPrefix = `http://gobetween.oklabs.org/`;
-const corsProxyPrefix = `http://www.whateverorigin.org/get?url=`;
+const { google } = window;
+const service = new google.maps.places.AutocompleteService();
 
-const googlePlacesAutoCompleteBaseURL = `${corsProxyPrefix}https://maps.googleapis.com/maps/api/place/autocomplete/json`;
+export interface AutoCompleteSuggestion {
+  name: string;
+  id: string;
+}
+
+export interface AutoCompleteResult {
+  suggestions: AutoCompleteSuggestion[];
+}
 
 export async function googlePlacesAutoComplete(
   searchText: string,
   type: SearchType
-) {
-  const googlePlacesSearchType = getGooglePlacesSearchTypeFromSearchType(type);
-  const url = getGooglePlacesAutoCompleteURL(
-    searchText,
-    googlePlacesSearchType
-  );
+): Promise<AutoCompleteResult> {
+  const autocompleteType = getGooglePlacesSearchTypeFromSearchType(type);
+  return new Promise((resolve, reject) => {
+    service.getPlacePredictions(
+      {
+        input: searchText,
+        types: autocompleteType ? [autocompleteType] : undefined,
+      },
+      (
+        predictions: google.maps.places.AutocompletePrediction[],
+        status: google.maps.places.PlacesServiceStatus
+      ) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK)
+          resolve(
+            getAutoCompleteResultFromGoogleAutocompletePredictions(predictions)
+          );
 
-  const result = await axios.get(url, { headers: "" });
-  // TODO: translate
-  return result;
+        // TODO: figure out how to better handle error
+        reject("Search request failed");
+      }
+    );
+  });
 }
 
-function getGooglePlacesAutoCompleteURL(
-  input: string,
-  searchType: GooglePlacesAutoCompleteSearchType
-) {
-  return appendGoogleAPIKeyToUrl(
-    `${googlePlacesAutoCompleteBaseURL}?input=${input}&types=${searchType}`
-  );
+function getAutoCompleteResultFromGoogleAutocompletePredictions(
+  predictions: google.maps.places.AutocompletePrediction[]
+): AutoCompleteResult {
+  return {
+    suggestions: predictions.map((prediction) => ({
+      name: prediction.description,
+      id: prediction.place_id,
+    })),
+  };
 }
 
 /**
@@ -59,31 +77,3 @@ type GooglePlacesAutoCompleteSearchType =
   | "(regions)"
   | "(cities)"
   | undefined;
-
-const { google } = window;
-const service = new google.maps.places.AutocompleteService();
-
-export async function googlePlacesAutoComplete2(
-  searchText: string,
-  type: SearchType
-) {
-  const autocompleteType = getGooglePlacesSearchTypeFromSearchType(type);
-  return new Promise((resolve, reject) => {
-    service.getPlacePredictions(
-      {
-        input: searchText,
-        types: autocompleteType ? [autocompleteType] : undefined,
-      },
-      (
-        prediction: google.maps.places.AutocompletePrediction[],
-        status: google.maps.places.PlacesServiceStatus
-      ) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK)
-          resolve(prediction);
-
-        // TODO: figure out how to better handle error
-        reject("Search request failed");
-      }
-    );
-  });
-}
