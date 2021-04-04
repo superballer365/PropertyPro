@@ -74,8 +74,15 @@ export async function googlePlacesAutoComplete2(
         input: searchText,
         types: autocompleteType ? [autocompleteType] : undefined,
       },
-      (prediction: google.maps.places.AutocompletePrediction[]) => {
-        resolve(prediction);
+      (
+        prediction: google.maps.places.AutocompletePrediction[],
+        status: google.maps.places.PlacesServiceStatus
+      ) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK)
+          resolve(prediction);
+
+        // TODO: figure out how to better handle error
+        reject("Search request failed");
       }
     );
   });
