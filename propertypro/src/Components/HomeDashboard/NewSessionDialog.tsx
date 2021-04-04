@@ -4,7 +4,11 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { SessionContext } from "../../Contexts/SessionContext";
-import { googlePlacesAutoComplete, SearchType } from "../../API/Google Places";
+import {
+  googlePlacesAutoComplete,
+  googlePlacesAutoComplete2,
+  SearchType,
+} from "../../API/Google Places";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
   const { createSession, markDirty } = React.useContext(SessionContext);
@@ -39,7 +43,7 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
   async function handleTestButtonClick() {
     const searchText = "Bosto";
 
-    const result = await googlePlacesAutoComplete(searchText, SearchType.City);
+    const result = await googlePlacesAutoComplete2(searchText, SearchType.City);
     console.log(result);
   }
 

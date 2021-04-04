@@ -1,8 +1,12 @@
 import { appendGoogleAPIKeyToUrl, SearchType } from ".";
 import axios from "axios";
 
-const googlePlacesAutoCompleteBaseURL =
-  "https://thingproxy.freeboard.io/fetch/https://maps.googleapis.com/maps/api/place/autocomplete/json";
+// const corsProxyPrefix = `https://thingproxy.freeboard.io/fetch/`
+// const corsProxyPrefix = `http://alloworigin.com/get?url=`;
+// const corsProxyPrefix = `http://gobetween.oklabs.org/`;
+const corsProxyPrefix = `http://www.whateverorigin.org/get?url=`;
+
+const googlePlacesAutoCompleteBaseURL = `${corsProxyPrefix}https://maps.googleapis.com/maps/api/place/autocomplete/json`;
 
 export async function googlePlacesAutoComplete(
   searchText: string,
@@ -14,7 +18,7 @@ export async function googlePlacesAutoComplete(
     googlePlacesSearchType
   );
 
-  const result = await axios.get(url);
+  const result = await axios.get(url, { headers: "" });
   // TODO: translate
   return result;
 }
@@ -55,3 +59,24 @@ type GooglePlacesAutoCompleteSearchType =
   | "(regions)"
   | "(cities)"
   | undefined;
+
+const { google } = window;
+const service = new google.maps.places.AutocompleteService();
+
+export async function googlePlacesAutoComplete2(
+  searchText: string,
+  type: SearchType
+) {
+  const autocompleteType = getGooglePlacesSearchTypeFromSearchType(type);
+  return new Promise((resolve, reject) => {
+    service.getPlacePredictions(
+      {
+        input: searchText,
+        types: autocompleteType ? [autocompleteType] : undefined,
+      },
+      (prediction: google.maps.places.AutocompletePrediction[]) => {
+        resolve(prediction);
+      }
+    );
+  });
+}
