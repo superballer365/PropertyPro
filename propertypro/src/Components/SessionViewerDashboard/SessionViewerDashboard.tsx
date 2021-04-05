@@ -12,7 +12,7 @@ export default function SessionViewerDashboard({ session }: IProps) {
     <div className={styles.container}>
       <div className={styles.listingsPanel}>listings panel</div>
       <div className={styles.mapContainer}>
-        <Map />
+        <Map session={session} />
       </div>
     </div>
   );

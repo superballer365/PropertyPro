@@ -142,6 +142,19 @@ export type CreateSessionMutation = {
     id: string,
     name: string,
     searchCity: string,
+    searchBounds:  {
+      __typename: "BoundingBox",
+      bottomLeft:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+      topRight:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -158,6 +171,19 @@ export type UpdateSessionMutation = {
     id: string,
     name: string,
     searchCity: string,
+    searchBounds:  {
+      __typename: "BoundingBox",
+      bottomLeft:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+      topRight:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -174,6 +200,19 @@ export type DeleteSessionMutation = {
     id: string,
     name: string,
     searchCity: string,
+    searchBounds:  {
+      __typename: "BoundingBox",
+      bottomLeft:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+      topRight:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -189,6 +228,19 @@ export type GetSessionQuery = {
     id: string,
     name: string,
     searchCity: string,
+    searchBounds:  {
+      __typename: "BoundingBox",
+      bottomLeft:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+      topRight:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -208,6 +260,19 @@ export type ListSessionsQuery = {
       id: string,
       name: string,
       searchCity: string,
+      searchBounds:  {
+        __typename: "BoundingBox",
+        bottomLeft:  {
+          __typename: "Coordinate",
+          lat: number,
+          lng: number,
+        },
+        topRight:  {
+          __typename: "Coordinate",
+          lat: number,
+          lng: number,
+        },
+      },
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -221,6 +286,19 @@ export type OnCreateSessionSubscription = {
     id: string,
     name: string,
     searchCity: string,
+    searchBounds:  {
+      __typename: "BoundingBox",
+      bottomLeft:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+      topRight:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -232,6 +310,19 @@ export type OnUpdateSessionSubscription = {
     id: string,
     name: string,
     searchCity: string,
+    searchBounds:  {
+      __typename: "BoundingBox",
+      bottomLeft:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+      topRight:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -243,6 +334,19 @@ export type OnDeleteSessionSubscription = {
     id: string,
     name: string,
     searchCity: string,
+    searchBounds:  {
+      __typename: "BoundingBox",
+      bottomLeft:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+      topRight:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    },
     createdAt: string,
     updatedAt: string,
   } | null,

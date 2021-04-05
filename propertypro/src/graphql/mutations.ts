@@ -11,6 +11,16 @@ export const createSession = /* GraphQL */ `
       id
       name
       searchCity
+      searchBounds {
+        bottomLeft {
+          lat
+          lng
+        }
+        topRight {
+          lat
+          lng
+        }
+      }
       createdAt
       updatedAt
     }
@@ -25,6 +35,16 @@ export const updateSession = /* GraphQL */ `
       id
       name
       searchCity
+      searchBounds {
+        bottomLeft {
+          lat
+          lng
+        }
+        topRight {
+          lat
+          lng
+        }
+      }
       createdAt
       updatedAt
     }
@@ -39,6 +59,16 @@ export const deleteSession = /* GraphQL */ `
       id
       name
       searchCity
+      searchBounds {
+        bottomLeft {
+          lat
+          lng
+        }
+        topRight {
+          lat
+          lng
+        }
+      }
       createdAt
       updatedAt
     }

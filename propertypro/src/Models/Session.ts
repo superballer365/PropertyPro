@@ -29,6 +29,8 @@ function mapListSessionsQuery(
         ({
           id: session?.id,
           name: session?.name,
+          searchCity: session?.searchCity,
+          searchBounds: session?.searchBounds,
         } as SessionData)
     ) ?? []
   );

@@ -43,7 +43,7 @@ export default function SessionContextProvider({
 }) {
   const [selectedSession, setSelectedSession] = React.useState<SessionData>();
   const [sessions, setSessions] = React.useState<SessionData[]>([]);
-  const [loadingSessions, setLoadingSessions] = React.useState(false);
+  const [loadingSessions, setLoadingSessions] = React.useState(true);
   const [isDirty, setIsDirty] = React.useState(true);
 
   const createSessionHandler = React.useCallback(
@@ -97,6 +97,7 @@ export default function SessionContextProvider({
     callGraphQL<ListSessionsQuery>(listSessions)
       .then((result) => {
         const sessions = mapListSessions(result);
+        console.log(sessions);
         !isStale && setSessions(sessions);
       })
       .catch((err) => console.error("Error getting sessions", err))

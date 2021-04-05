@@ -36,10 +36,11 @@ export default function SessionViewerPage() {
     }
   }, [sessionId, setSelectedSession, loadingSessions, sessions]);
 
-  if (loadingSessions) return <LoadingSpinner text="loading session..." />;
-  else if (sessionLoadError)
+  if (sessionLoadError)
     return (
       <ErrorPage text="Could not find a session matching the specified id." />
     );
-  else return <SessionViewerDashboard session={selectedSession!} />;
+  if (loadingSessions || !selectedSession)
+    return <LoadingSpinner text="loading session..." />;
+  return <SessionViewerDashboard session={selectedSession} />;
 }
