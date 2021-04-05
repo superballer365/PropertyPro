@@ -5,7 +5,10 @@ import Form from "react-bootstrap/Form";
 import { SessionContext } from "../../Contexts/SessionContext";
 import { AutoCompleteSuggestion } from "../../API/Google Places";
 import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
-import { geocodeByPlaceId } from "../../API/Google Places/Geocoding";
+import {
+  BoundingBox,
+  geocodeByPlaceId,
+} from "../../API/Google Places/Geocoding";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
   const { createSession, markDirty } = React.useContext(SessionContext);
@@ -30,7 +33,11 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
     const errors = validateFormData(formData);
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
-      const created = await createSession({ name: formData.name! });
+      const created = await createSession({
+        name: formData.name!,
+        searchCity: formData.searchCity!,
+        searchBounds: formData.searchBounds!,
+      });
       if (created) markDirty();
       else console.log("Failed to create session!"); // should throw toast here in the future
       onClose();
@@ -44,6 +51,8 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
       setFormData((prev) => ({
         ...prev,
         searchCity: city.name,
+        // there is guaranteed to be one result
+        searchBounds: cityGeocodingInfo[0].boundingBox,
       }));
     } catch (err) {
       // TODO: show toast and maybe clear the search?
@@ -109,25 +118,31 @@ interface IProps {
 interface CreateSessionFormData {
   name?: string;
   searchCity?: string;
+  searchBounds?: BoundingBox;
 }
 
 const DEFAULT_FORM_DATA: CreateSessionFormData = {
   name: undefined,
+  searchCity: undefined,
+  searchBounds: undefined,
 };
 
 interface FormDataErrors {
   nameError?: string;
   searchCityError?: string;
+  searchBoundsError?: string;
 }
 
 const DEFAULT_DATA_ERRORS: FormDataErrors = {
   nameError: undefined,
   searchCityError: undefined,
+  searchBoundsError: undefined,
 };
 
 function validateFormData(formData: CreateSessionFormData): FormDataErrors {
   let nameError;
   let searchCityError;
+  let searchBoundsError;
 
   if (!formData.name) {
     nameError = "Must provide name for session";
@@ -136,10 +151,14 @@ function validateFormData(formData: CreateSessionFormData): FormDataErrors {
     console.log("search city error");
     searchCityError = "Must enter a search city";
   }
+  if (!formData.searchBounds) {
+    searchBoundsError = "Search bounds must be computed";
+  }
 
   return {
     nameError,
     searchCityError,
+    searchBoundsError,
   };
 }
 

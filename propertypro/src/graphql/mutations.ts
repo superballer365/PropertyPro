@@ -10,6 +10,7 @@ export const createSession = /* GraphQL */ `
     createSession(input: $input, condition: $condition) {
       id
       name
+      searchCity
       createdAt
       updatedAt
     }
@@ -23,6 +24,7 @@ export const updateSession = /* GraphQL */ `
     updateSession(input: $input, condition: $condition) {
       id
       name
+      searchCity
       createdAt
       updatedAt
     }
@@ -36,6 +38,7 @@ export const deleteSession = /* GraphQL */ `
     deleteSession(input: $input, condition: $condition) {
       id
       name
+      searchCity
       createdAt
       updatedAt
     }

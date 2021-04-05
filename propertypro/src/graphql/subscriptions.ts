@@ -7,6 +7,7 @@ export const onCreateSession = /* GraphQL */ `
     onCreateSession {
       id
       name
+      searchCity
       createdAt
       updatedAt
     }
@@ -17,6 +18,7 @@ export const onUpdateSession = /* GraphQL */ `
     onUpdateSession {
       id
       name
+      searchCity
       createdAt
       updatedAt
     }
@@ -27,6 +29,7 @@ export const onDeleteSession = /* GraphQL */ `
     onDeleteSession {
       id
       name
+      searchCity
       createdAt
       updatedAt
     }

@@ -5,10 +5,23 @@
 export type CreateSessionInput = {
   id?: string | null,
   name: string,
+  searchCity: string,
+  searchBounds: BoundingBoxInput,
+};
+
+export type BoundingBoxInput = {
+  bottomLeft: CoordinateInput,
+  topRight: CoordinateInput,
+};
+
+export type CoordinateInput = {
+  lat: number,
+  lng: number,
 };
 
 export type ModelSessionConditionInput = {
   name?: ModelStringInput | null,
+  searchCity?: ModelStringInput | null,
   and?: Array< ModelSessionConditionInput | null > | null,
   or?: Array< ModelSessionConditionInput | null > | null,
   not?: ModelSessionConditionInput | null,
@@ -58,13 +71,29 @@ export type Session = {
   __typename: "Session",
   id?: string,
   name?: string,
+  searchCity?: string,
+  searchBounds?: BoundingBox,
   createdAt?: string,
   updatedAt?: string,
+};
+
+export type BoundingBox = {
+  __typename: "BoundingBox",
+  bottomLeft?: Coordinate,
+  topRight?: Coordinate,
+};
+
+export type Coordinate = {
+  __typename: "Coordinate",
+  lat?: number,
+  lng?: number,
 };
 
 export type UpdateSessionInput = {
   id: string,
   name?: string | null,
+  searchCity?: string | null,
+  searchBounds?: BoundingBoxInput | null,
 };
 
 export type DeleteSessionInput = {
@@ -74,6 +103,7 @@ export type DeleteSessionInput = {
 export type ModelSessionFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
+  searchCity?: ModelStringInput | null,
   and?: Array< ModelSessionFilterInput | null > | null,
   or?: Array< ModelSessionFilterInput | null > | null,
   not?: ModelSessionFilterInput | null,
@@ -111,6 +141,7 @@ export type CreateSessionMutation = {
     __typename: "Session",
     id: string,
     name: string,
+    searchCity: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -126,6 +157,7 @@ export type UpdateSessionMutation = {
     __typename: "Session",
     id: string,
     name: string,
+    searchCity: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -141,6 +173,7 @@ export type DeleteSessionMutation = {
     __typename: "Session",
     id: string,
     name: string,
+    searchCity: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -155,6 +188,7 @@ export type GetSessionQuery = {
     __typename: "Session",
     id: string,
     name: string,
+    searchCity: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -173,6 +207,7 @@ export type ListSessionsQuery = {
       __typename: "Session",
       id: string,
       name: string,
+      searchCity: string,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -185,6 +220,7 @@ export type OnCreateSessionSubscription = {
     __typename: "Session",
     id: string,
     name: string,
+    searchCity: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -195,6 +231,7 @@ export type OnUpdateSessionSubscription = {
     __typename: "Session",
     id: string,
     name: string,
+    searchCity: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -205,6 +242,7 @@ export type OnDeleteSessionSubscription = {
     __typename: "Session",
     id: string,
     name: string,
+    searchCity: string,
     createdAt: string,
     updatedAt: string,
   } | null,

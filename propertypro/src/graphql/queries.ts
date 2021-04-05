@@ -7,6 +7,7 @@ export const getSession = /* GraphQL */ `
     getSession(id: $id) {
       id
       name
+      searchCity
       createdAt
       updatedAt
     }
@@ -22,6 +23,7 @@ export const listSessions = /* GraphQL */ `
       items {
         id
         name
+        searchCity
         createdAt
         updatedAt
       }

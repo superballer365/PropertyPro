@@ -1,15 +1,23 @@
 import { CreateSessionInput, ListSessionsQuery } from "../API";
 import { GraphQLResult } from "@aws-amplify/api";
+import { BoundingBox } from "../API/Google Places/Geocoding";
 
 interface SessionData {
   id?: string;
   name: string;
+  searchCity: string;
+  searchBounds: BoundingBox;
 }
 
 export function sessionDataToCreateSessionInput(
   sessionData: SessionData
 ): CreateSessionInput {
-  return { name: sessionData.name, id: sessionData.id };
+  return {
+    name: sessionData.name,
+    id: sessionData.id,
+    searchCity: sessionData.searchCity,
+    searchBounds: sessionData.searchBounds,
+  };
 }
 
 function mapListSessionsQuery(

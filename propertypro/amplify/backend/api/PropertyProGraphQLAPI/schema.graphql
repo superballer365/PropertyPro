@@ -1,4 +1,16 @@
 type Session @model {
   id: ID!
   name: String!
+  searchCity: String!
+  searchBounds: BoundingBox!
+}
+
+type Coordinate {
+  lat: Float!
+  lng: Float!
+}
+
+type BoundingBox {
+  bottomLeft: Coordinate!
+  topRight: Coordinate!
 }
