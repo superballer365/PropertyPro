@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import { SessionContext } from "../../Contexts/SessionContext";
 import { AutoCompleteSuggestion } from "../../API/Google Places";
 import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
+import { geocodeByPlaceId } from "../../API/Google Places/Geocoding";
 
 export default function NewSessionDialog({ open, onClose }: IProps) {
   const { createSession, markDirty } = React.useContext(SessionContext);
@@ -33,6 +34,20 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
       if (created) markDirty();
       else console.log("Failed to create session!"); // should throw toast here in the future
       onClose();
+    }
+  }
+
+  async function handleCitySelect(city: AutoCompleteSuggestion) {
+    try {
+      const cityGeocodingInfo = await geocodeByPlaceId(city.id);
+      console.log(cityGeocodingInfo);
+      setFormData((prev) => ({
+        ...prev,
+        searchCity: city.name,
+      }));
+    } catch (err) {
+      // TODO: show toast and maybe clear the search?
+      console.error("Failed to load location information.");
     }
   }
 
@@ -65,12 +80,7 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
           <Form.Group controlId="sessionForm.SearchCity">
             <Form.Label>Search City</Form.Label>
             <AddressSearchBar
-              onSelect={(value: AutoCompleteSuggestion) => {
-                setFormData((prev) => ({
-                  ...prev,
-                  searchCity: value.name,
-                }));
-              }}
+              onSelect={handleCitySelect}
               isInvalid={!!formDataErrors.searchCityError}
             />
             <Form.Control.Feedback type="invalid">
