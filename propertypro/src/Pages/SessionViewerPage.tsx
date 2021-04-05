@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../Components/LoadingSpinner/LoadingSpinner";
 import SessionViewerDashboard from "../Components/SessionViewerDashboard/SessionViewerDashboard";
 import { SessionContext } from "../Contexts/SessionContext";
+import SessionData from "../Models/Session";
 import ErrorPage from "./ErrorPage";
 
 interface RouteParams {
@@ -10,13 +11,9 @@ interface RouteParams {
 }
 
 export default function SessionViewerPage() {
-  const {
-    setSelectedSession,
-    selectedSession,
-    loadingSessions,
-    sessions,
-  } = React.useContext(SessionContext);
+  const { loadingSessions, sessions } = React.useContext(SessionContext);
   const [sessionLoadError, setSessionLoadError] = React.useState(false);
+  const [sessionFromRoute, setSessionFromRoute] = React.useState<SessionData>();
   const { sessionId } = useParams<RouteParams>();
 
   // set the selected session based on the ID from the route
@@ -31,16 +28,16 @@ export default function SessionViewerPage() {
     if (!matchingSesion) {
       setSessionLoadError(true);
     } else {
-      setSelectedSession(matchingSesion);
+      setSessionFromRoute(matchingSesion);
       setSessionLoadError(false);
     }
-  }, [sessionId, setSelectedSession, loadingSessions, sessions]);
+  }, [sessionId, loadingSessions, sessions]);
 
   if (sessionLoadError)
     return (
       <ErrorPage text="Could not find a session matching the specified id." />
     );
-  if (loadingSessions || !selectedSession)
+  if (loadingSessions || !sessionFromRoute)
     return <LoadingSpinner text="loading session..." />;
-  return <SessionViewerDashboard session={selectedSession} />;
+  return <SessionViewerDashboard session={sessionFromRoute} />;
 }

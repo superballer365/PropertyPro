@@ -97,7 +97,6 @@ export default function SessionContextProvider({
     callGraphQL<ListSessionsQuery>(listSessions)
       .then((result) => {
         const sessions = mapListSessions(result);
-        console.log(sessions);
         !isStale && setSessions(sessions);
       })
       .catch((err) => console.error("Error getting sessions", err))
