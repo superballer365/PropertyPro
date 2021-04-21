@@ -33,17 +33,19 @@ export default function Map({ session }: IProps) {
 
   return (
     <div ref={mapContainerRef} style={{ height: "100%" }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY! }}
-        defaultCenter={defaultCenter}
-        defaultZoom={defaultZoom}
-        options={{
-          streetViewControl: true,
-          mapTypeControl: true,
-          fullscreenControl: false,
-        }}
-        yesIWantToUseGoogleMapApiInternals={true}
-      ></GoogleMapReact>
+      {defaultCenter && defaultZoom && (
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY! }}
+          defaultCenter={defaultCenter}
+          defaultZoom={defaultZoom}
+          options={{
+            streetViewControl: true,
+            mapTypeControl: true,
+            fullscreenControl: false,
+          }}
+          yesIWantToUseGoogleMapApiInternals={true}
+        ></GoogleMapReact>
+      )}
     </div>
   );
 }
