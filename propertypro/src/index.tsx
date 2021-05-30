@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -17,6 +18,7 @@ ReactDOM.render(
       <QueryClientProvider client={queryClient}>
         <div className="mainContainer">
           <App />
+          <ReactQueryDevtools initialIsOpen={false} />
         </div>
       </QueryClientProvider>
     </AuthorizationContextProvider>

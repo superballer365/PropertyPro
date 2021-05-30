@@ -1,4 +1,4 @@
-import { CreateSessionInput, ListSessionsQuery } from "../API";
+import { CreateSessionInput, GetSessionQuery, ListSessionsQuery } from "../API";
 import { GraphQLResult } from "@aws-amplify/api";
 import { BoundingBox } from "../API/Google Places/Geocoding";
 
@@ -36,5 +36,13 @@ function mapListSessionsQuery(
   );
 }
 
+function mapGetSessionQuery(
+  getSessionQuery: GraphQLResult<GetSessionQuery>
+): SessionData | undefined {
+  if (!getSessionQuery.data?.getSession) return undefined;
+  return getSessionQuery.data.getSession;
+}
+
 export default SessionData;
 export { mapListSessionsQuery as mapListSessions };
+export { mapGetSessionQuery as mapGetSession };

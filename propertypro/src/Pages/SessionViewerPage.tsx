@@ -1,9 +1,12 @@
 import React from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { GetSessionQuery } from "../API";
 import LoadingSpinner from "../Components/LoadingSpinner/LoadingSpinner";
 import SessionViewerDashboard from "../Components/SessionViewerDashboard/SessionViewerDashboard";
-import { SessionContext } from "../Contexts/SessionContext";
-import SessionData from "../Models/Session";
+import callGraphQL from "../graphql/callGraphQL";
+import { getSession } from "../graphql/queries";
+import SessionData, { mapGetSession } from "../Models/Session";
 import ErrorPage from "./ErrorPage";
 
 interface RouteParams {
@@ -11,10 +14,21 @@ interface RouteParams {
 }
 
 export default function SessionViewerPage() {
-  const { loadingSessions, sessions } = React.useContext(SessionContext);
+  const { sessionId } = useParams<RouteParams>();
+
+  const {
+    isLoading: loadingSessions,
+    isError,
+    data: matchingSession,
+  } = useQuery<SessionData | undefined>(["session", sessionId], async () => {
+    console.log(sessionId);
+    const result = await callGraphQL<GetSessionQuery>(getSession, {
+      id: sessionId,
+    });
+    return mapGetSession(result);
+  });
   const [sessionLoadError, setSessionLoadError] = React.useState(false);
   const [sessionFromRoute, setSessionFromRoute] = React.useState<SessionData>();
-  const { sessionId } = useParams<RouteParams>();
 
   // set the selected session based on the ID from the route
   React.useEffect(() => {
@@ -24,14 +38,13 @@ export default function SessionViewerPage() {
       return;
     }
 
-    const matchingSesion = sessions.find((session) => session.id === sessionId);
-    if (!matchingSesion) {
+    if (!matchingSession) {
       setSessionLoadError(true);
     } else {
-      setSessionFromRoute(matchingSesion);
+      setSessionFromRoute(matchingSession);
       setSessionLoadError(false);
     }
-  }, [sessionId, loadingSessions, sessions]);
+  }, [sessionId, loadingSessions, matchingSession]);
 
   if (sessionLoadError)
     return (

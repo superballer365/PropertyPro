@@ -1,20 +1,29 @@
 import React from "react";
+import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "react-bootstrap/Card";
 import { SessionContext } from "../../Contexts/SessionContext";
-import SessionData from "../../Models/Session";
+import SessionData, { mapListSessions } from "../../Models/Session";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import EditSessionDialog from "./EditSessionDialog";
+import { ListSessionsQuery } from "../../API";
+import callGraphQL from "../../graphql/callGraphQL";
+import { listSessions } from "../../graphql/queries";
 
 export default function ExistingSessionsSection() {
-  const { sessions: existingSessions, loadingSessions } =
-    React.useContext(SessionContext);
+  const {
+    isLoading: loadingSessions,
+    isError,
+    data: existingSessions,
+  } = useQuery<SessionData[]>("sessions", async () => {
+    const result = await callGraphQL<ListSessionsQuery>(listSessions);
+    return mapListSessions(result);
+  });
 
   const [sessionToEdit, setSessionToEdit] =
     React.useState<SessionData | undefined>(undefined);
-  const isEditing = !!sessionToEdit;
 
   function handleEditClick(session: SessionData) {
     setSessionToEdit(session);
@@ -22,10 +31,11 @@ export default function ExistingSessionsSection() {
 
   function getContent() {
     if (loadingSessions) return <LoadingSpinner text="Loading sessions..." />;
-    else if (existingSessions.length > 0)
+
+    if (existingSessions && existingSessions.length > 0)
       return (
         <div>
-          {existingSessions.map((session) => (
+          {existingSessions?.map((session) => (
             <SessionEntry
               key={session.id}
               sessionData={session}
@@ -34,7 +44,8 @@ export default function ExistingSessionsSection() {
           ))}
         </div>
       );
-    else return <div>No existing sessions</div>;
+
+    return <div>No existing sessions</div>;
   }
 
   return (
