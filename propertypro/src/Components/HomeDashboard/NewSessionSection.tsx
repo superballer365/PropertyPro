@@ -2,14 +2,15 @@ import React from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
 import customStyles from "./NewSessionSection.module.scss";
-import NewSessionDialog from "./NewSessionDialog";
+import SessionDialog from "./SessionDialog";
 
 export default function NewSessionSection() {
   const [showingModal, setShowingModal] = React.useState(false);
 
   return (
     <>
-      <NewSessionDialog
+      <SessionDialog
+        type="create"
         open={showingModal}
         onClose={() => setShowingModal(false)}
       />

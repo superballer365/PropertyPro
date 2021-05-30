@@ -10,14 +10,12 @@ import {
   geocodeByPlaceId,
 } from "../../API/Google Places/Geocoding";
 
-export default function NewSessionDialog({ open, onClose }: IProps) {
+export default function SessionDialog({ open, onClose }: IProps) {
   const { createSession, markDirty } = React.useContext(SessionContext);
-  const [formData, setFormData] = React.useState<CreateSessionFormData>(
-    DEFAULT_FORM_DATA
-  );
-  const [formDataErrors, setFormDataErrors] = React.useState<FormDataErrors>(
-    DEFAULT_DATA_ERRORS
-  );
+  const [formData, setFormData] =
+    React.useState<CreateSessionFormData>(DEFAULT_FORM_DATA);
+  const [formDataErrors, setFormDataErrors] =
+    React.useState<FormDataErrors>(DEFAULT_DATA_ERRORS);
 
   React.useEffect(() => {
     // reset on open
@@ -111,6 +109,7 @@ export default function NewSessionDialog({ open, onClose }: IProps) {
 }
 
 interface IProps {
+  type: "create" | "update";
   open: boolean;
   onClose: () => void;
 }

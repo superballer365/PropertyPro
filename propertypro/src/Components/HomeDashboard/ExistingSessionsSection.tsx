@@ -6,11 +6,17 @@ import { SessionContext } from "../../Contexts/SessionContext";
 import SessionData from "../../Models/Session";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
+import SessionDialog from "./SessionDialog";
 
 export default function ExistingSessionsSection() {
-  const { sessions: existingSessions, loadingSessions } = React.useContext(
-    SessionContext
-  );
+  const { sessions: existingSessions, loadingSessions } =
+    React.useContext(SessionContext);
+
+  const [isEditing, setIsEditing] = React.useState(false);
+
+  function handleEditClick(sessionToEdit: SessionData) {
+    setIsEditing(true);
+  }
 
   function getContent() {
     if (loadingSessions) return <LoadingSpinner text="Loading sessions..." />;
@@ -18,7 +24,11 @@ export default function ExistingSessionsSection() {
       return (
         <div>
           {existingSessions.map((session) => (
-            <SessionEntry key={session.id} sessionData={session} />
+            <SessionEntry
+              key={session.id}
+              sessionData={session}
+              onEditClick={handleEditClick}
+            />
           ))}
         </div>
       );
@@ -26,18 +36,26 @@ export default function ExistingSessionsSection() {
   }
 
   return (
-    <Card>
-      <Card.Header>My Sessions</Card.Header>
-      <Card.Body>{getContent()}</Card.Body>
-    </Card>
+    <>
+      <SessionDialog
+        type="update"
+        open={isEditing}
+        onClose={() => setIsEditing(false)}
+      />
+      <Card>
+        <Card.Header>My Sessions</Card.Header>
+        <Card.Body>{getContent()}</Card.Body>
+      </Card>
+    </>
   );
 }
 
 interface ISessionEntryProps {
   sessionData: SessionData;
+  onEditClick: (session: SessionData) => void;
 }
 
-function SessionEntry({ sessionData }: ISessionEntryProps) {
+function SessionEntry({ sessionData, onEditClick }: ISessionEntryProps) {
   const { deleteSession, markDirty } = React.useContext(SessionContext);
   const [deletingSession, setDeletingSession] = React.useState(false);
 
@@ -58,6 +76,10 @@ function SessionEntry({ sessionData }: ISessionEntryProps) {
     }
   }
 
+  function handleEditClick() {
+    onEditClick(sessionData);
+  }
+
   function handleOpenClick() {
     history.push(`/Session/${sessionData.id!}`);
   }
@@ -70,6 +92,9 @@ function SessionEntry({ sessionData }: ISessionEntryProps) {
           <div>
             <Button variant="primary" onClick={handleOpenClick}>
               Open
+            </Button>{" "}
+            <Button variant="primary" onClick={handleEditClick}>
+              Edit
             </Button>{" "}
             <Button variant="danger" onClick={handleDeleteClick}>
               {deletingSession ? (
