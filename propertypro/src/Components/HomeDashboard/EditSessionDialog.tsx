@@ -2,11 +2,12 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { SessionContext } from "../../Contexts/SessionContext";
 import SessionData from "../../Models/Session";
+import { useUpdateSession } from "../../Utils/Hooks";
 
 export default function EditSessionDialog({ session, onClose }: IProps) {
-  const { updateSession, markDirty } = React.useContext(SessionContext);
+  const mutation = useUpdateSession();
+
   const [editableSessionData, setEditableSessionData] =
     React.useState<SessionData>({ ...session });
   const [formDataErrors, setFormDataErrors] =
@@ -19,14 +20,12 @@ export default function EditSessionDialog({ session, onClose }: IProps) {
     const errors = validateFormData(editableSessionData);
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
-      const updated = await updateSession({
-        id: session!.id, // this feels bad, but will be cleaned up once id is frontend-generated, since it will be on the editableSessionData object
+      await mutation.mutate({
+        id: editableSessionData!.id,
         name: editableSessionData.name!,
         searchCity: editableSessionData.searchCity!,
         searchBounds: editableSessionData.searchBounds!,
       });
-      if (updated) markDirty();
-      else console.log("Failed to update session!"); // should throw toast here in the future
       onClose();
     }
   }
