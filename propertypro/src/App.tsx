@@ -8,7 +8,6 @@ import HomePage from "./Pages/HomePage";
 import { withHeader } from "./Components/Header/Header";
 import SettingsPage from "./Pages/SettingsPage";
 import AboutPage from "./Pages/AboutPage";
-import SessionContextProvider from "./Contexts/SessionContext";
 import SessionViewerPage from "./Pages/SessionViewerPage";
 
 function App() {
@@ -29,18 +28,16 @@ function App() {
     if (!user) return <Route path="/" component={LandingPage} />;
 
     return (
-      <SessionContextProvider>
-        <>
-          <Route path="/" exact component={withHeader(HomePage)} />
-          <Route path="/Settings" component={withHeader(SettingsPage)} />
-          <Route path="/About" component={withHeader(AboutPage)} />
-          <Route
-            path="/Session/:sessionId"
-            exact
-            component={withHeader(SessionViewerPage)}
-          />
-        </>
-      </SessionContextProvider>
+      <>
+        <Route path="/" exact component={withHeader(HomePage)} />
+        <Route path="/Settings" component={withHeader(SettingsPage)} />
+        <Route path="/About" component={withHeader(AboutPage)} />
+        <Route
+          path="/Session/:sessionId"
+          exact
+          component={withHeader(SessionViewerPage)}
+        />
+      </>
     );
   }
 
