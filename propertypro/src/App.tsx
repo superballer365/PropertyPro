@@ -25,23 +25,23 @@ function App() {
           component={() => <LoadingPage text="signing in..." />}
         />
       );
-    else if (!user) return <Route path="/" component={LandingPage} />;
-    else {
-      return (
-        <SessionContextProvider>
-          <>
-            <Route path="/" exact component={withHeader(HomePage)} />
-            <Route path="/Settings" component={withHeader(SettingsPage)} />
-            <Route path="/About" component={withHeader(AboutPage)} />
-            <Route
-              path="/Session/:sessionId"
-              exact
-              component={withHeader(SessionViewerPage)}
-            />
-          </>
-        </SessionContextProvider>
-      );
-    }
+
+    if (!user) return <Route path="/" component={LandingPage} />;
+
+    return (
+      <SessionContextProvider>
+        <>
+          <Route path="/" exact component={withHeader(HomePage)} />
+          <Route path="/Settings" component={withHeader(SettingsPage)} />
+          <Route path="/About" component={withHeader(AboutPage)} />
+          <Route
+            path="/Session/:sessionId"
+            exact
+            component={withHeader(SessionViewerPage)}
+          />
+        </>
+      </SessionContextProvider>
+    );
   }
 
   return <Router>{getRoutes()}</Router>;
