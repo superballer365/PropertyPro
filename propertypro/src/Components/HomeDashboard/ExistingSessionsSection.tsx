@@ -12,10 +12,12 @@ export default function ExistingSessionsSection() {
   const { sessions: existingSessions, loadingSessions } =
     React.useContext(SessionContext);
 
-  const [isEditing, setIsEditing] = React.useState(false);
+  const [sessionToEdit, setSessionToEdit] =
+    React.useState<SessionData | undefined>(undefined);
+  const isEditing = !!sessionToEdit;
 
-  function handleEditClick(sessionToEdit: SessionData) {
-    setIsEditing(true);
+  function handleEditClick(session: SessionData) {
+    setSessionToEdit(session);
   }
 
   function getContent() {
@@ -37,11 +39,14 @@ export default function ExistingSessionsSection() {
 
   return (
     <>
-      <SessionDialog
-        type="update"
-        open={isEditing}
-        onClose={() => setIsEditing(false)}
-      />
+      {isEditing && (
+        <SessionDialog
+          type="update"
+          open={isEditing}
+          session={sessionToEdit}
+          onClose={() => setSessionToEdit(undefined)}
+        />
+      )}
       <Card>
         <Card.Header>My Sessions</Card.Header>
         <Card.Body>{getContent()}</Card.Body>

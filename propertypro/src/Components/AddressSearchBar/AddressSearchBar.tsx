@@ -8,10 +8,15 @@ import {
 
 interface IProps {
   onSelect: (selection: AutoCompleteSuggestion) => void;
+  defaultInputValue?: string;
   isInvalid: boolean;
 }
 
-export default function AutoCompleteSearchBar({ onSelect, isInvalid }: IProps) {
+export default function AutoCompleteSearchBar({
+  onSelect,
+  defaultInputValue,
+  isInvalid,
+}: IProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [suggestions, setSuggestions] = React.useState<
     AutoCompleteSuggestion[]
@@ -38,6 +43,7 @@ export default function AutoCompleteSearchBar({ onSelect, isInvalid }: IProps) {
       multiple={false}
       minLength={4}
       isLoading={isLoading}
+      defaultInputValue={defaultInputValue}
       onSearch={handleSearch}
       options={suggestions}
       onChange={handleSelect}

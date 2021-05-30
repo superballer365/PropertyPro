@@ -9,35 +9,56 @@ import {
   BoundingBox,
   geocodeByPlaceId,
 } from "../../API/Google Places/Geocoding";
+import SessionData from "../../Models/Session";
 
-export default function SessionDialog({ open, onClose }: IProps) {
-  const { createSession, markDirty } = React.useContext(SessionContext);
-  const [formData, setFormData] =
-    React.useState<CreateSessionFormData>(DEFAULT_FORM_DATA);
+export default function SessionDialog({
+  type,
+  session,
+  open,
+  onClose,
+}: IProps) {
+  const { createSession, updateSession, markDirty } =
+    React.useContext(SessionContext);
+  const [editableSessionData, setEditableSessionData] =
+    React.useState<CreateSessionFormData>(
+      session ? session : DEFAULT_FORM_DATA
+    );
   const [formDataErrors, setFormDataErrors] =
     React.useState<FormDataErrors>(DEFAULT_DATA_ERRORS);
-
-  React.useEffect(() => {
-    // reset on open
-    if (open) {
-      resetForm();
-    }
-  }, [open]);
 
   async function handleCreateClick(event: any) {
     event.preventDefault();
     event.stopPropagation();
 
-    const errors = validateFormData(formData);
+    const errors = validateFormData(editableSessionData);
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
       const created = await createSession({
-        name: formData.name!,
-        searchCity: formData.searchCity!,
-        searchBounds: formData.searchBounds!,
+        name: editableSessionData.name!,
+        searchCity: editableSessionData.searchCity!,
+        searchBounds: editableSessionData.searchBounds!,
       });
       if (created) markDirty();
       else console.log("Failed to create session!"); // should throw toast here in the future
+      onClose();
+    }
+  }
+
+  async function handleUpdateClick(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const errors = validateFormData(editableSessionData);
+    setFormDataErrors(errors);
+    if (!hasErrors(errors)) {
+      const updated = await updateSession({
+        id: session!.id, // this feels bad, but will be cleaned up once id is frontend-generated, since it will be on the editableSessionData object
+        name: editableSessionData.name!,
+        searchCity: editableSessionData.searchCity!,
+        searchBounds: editableSessionData.searchBounds!,
+      });
+      if (updated) markDirty();
+      else console.log("Failed to update session!"); // should throw toast here in the future
       onClose();
     }
   }
@@ -46,7 +67,7 @@ export default function SessionDialog({ open, onClose }: IProps) {
     try {
       const cityGeocodingInfo = await geocodeByPlaceId(city.id);
       console.log(cityGeocodingInfo);
-      setFormData((prev) => ({
+      setEditableSessionData((prev) => ({
         ...prev,
         searchCity: city.name,
         // there is guaranteed to be one result
@@ -58,15 +79,12 @@ export default function SessionDialog({ open, onClose }: IProps) {
     }
   }
 
-  function resetForm() {
-    setFormData(DEFAULT_FORM_DATA);
-    setFormDataErrors(DEFAULT_DATA_ERRORS);
-  }
-
   return (
-    <Modal show={open} onHide={onClose}>
+    <Modal show={true} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>New Session</Modal.Title>
+        <Modal.Title>
+          {type === "create" ? "New Session" : "Edit Session"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -74,9 +92,12 @@ export default function SessionDialog({ open, onClose }: IProps) {
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="session name"
-              value={formData.name ?? ""}
+              value={editableSessionData.name ?? ""}
               onChange={(event: any) =>
-                setFormData((prev) => ({ ...prev, name: event.target.value }))
+                setEditableSessionData((prev) => ({
+                  ...prev,
+                  name: event.target.value,
+                }))
               }
               isInvalid={!!formDataErrors.nameError}
             />
@@ -87,6 +108,7 @@ export default function SessionDialog({ open, onClose }: IProps) {
           <Form.Group controlId="sessionForm.SearchCity">
             <Form.Label>Search City</Form.Label>
             <AddressSearchBar
+              defaultInputValue={editableSessionData.searchCity}
               onSelect={handleCitySelect}
               isInvalid={!!formDataErrors.searchCityError}
             />
@@ -100,8 +122,11 @@ export default function SessionDialog({ open, onClose }: IProps) {
         <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={handleCreateClick}>
-          Create
+        <Button
+          variant="primary"
+          onClick={type === "create" ? handleCreateClick : handleUpdateClick}
+        >
+          {type === "create" ? "Create" : "Update"}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -111,6 +136,7 @@ export default function SessionDialog({ open, onClose }: IProps) {
 interface IProps {
   type: "create" | "update";
   open: boolean;
+  session?: SessionData;
   onClose: () => void;
 }
 

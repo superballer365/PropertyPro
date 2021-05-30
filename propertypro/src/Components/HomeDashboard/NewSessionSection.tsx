@@ -9,11 +9,13 @@ export default function NewSessionSection() {
 
   return (
     <>
-      <SessionDialog
-        type="create"
-        open={showingModal}
-        onClose={() => setShowingModal(false)}
-      />
+      {showingModal && (
+        <SessionDialog
+          type="create"
+          open={showingModal}
+          onClose={() => setShowingModal(false)}
+        />
+      )}
       <Jumbotron className={customStyles.jumbotron}>
         <h4>Create a new search session!</h4>
         <p>
