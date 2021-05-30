@@ -1,13 +1,18 @@
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
+  CreateSessionMutation,
   DeleteSessionMutation,
   GetSessionQuery,
   ListSessionsQuery,
   UpdateSessionMutation,
 } from "../../API";
 import callGraphQL from "../../graphql/callGraphQL";
-import { deleteSession, updateSession } from "../../graphql/mutations";
+import {
+  createSession,
+  deleteSession,
+  updateSession,
+} from "../../graphql/mutations";
 import { getSession, listSessions } from "../../graphql/queries";
 import SessionData, {
   mapGetSession,
@@ -31,6 +36,25 @@ export function useSession(sessionId: string) {
         id: sessionId,
       });
       return mapGetSession(result);
+    }
+  );
+}
+
+export function useCreateSession() {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async (newSession: SessionData) => {
+      const createSessionInput = sessionDataToApiSessionInput(newSession);
+      const response = await callGraphQL<CreateSessionMutation>(createSession, {
+        input: createSessionInput,
+      });
+      // TODO: map the response to the created SessionData object
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("sessions");
+      },
     }
   );
 }

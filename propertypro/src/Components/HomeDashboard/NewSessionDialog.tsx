@@ -2,16 +2,16 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { SessionContext } from "../../Contexts/SessionContext";
 import { AutoCompleteSuggestion } from "../../API/Google Places";
 import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
 import {
   BoundingBox,
   geocodeByPlaceId,
 } from "../../API/Google Places/Geocoding";
+import { useCreateSession } from "../../Utils/Hooks";
 
 export default function NewSessionDialog({ onClose }: IProps) {
-  const { createSession, markDirty } = React.useContext(SessionContext);
+  const createSessionMutation = useCreateSession();
 
   const [formData, setFormData] =
     React.useState<CreateSessionFormData>(DEFAULT_FORM_DATA);
@@ -25,13 +25,11 @@ export default function NewSessionDialog({ onClose }: IProps) {
     const errors = validateFormData(formData);
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
-      const created = await createSession({
+      await createSessionMutation.mutateAsync({
         name: formData.name!,
         searchCity: formData.searchCity!,
         searchBounds: formData.searchBounds!,
       });
-      if (created) markDirty();
-      else console.log("Failed to create session!"); // should throw toast here in the future
       onClose();
     }
   }
