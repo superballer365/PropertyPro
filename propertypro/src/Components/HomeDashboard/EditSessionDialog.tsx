@@ -20,7 +20,7 @@ export default function EditSessionDialog({ session, onClose }: IProps) {
     const errors = validateFormData(editableSessionData);
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
-      await mutation.mutate({
+      await mutation.mutateAsync({
         id: editableSessionData!.id,
         name: editableSessionData.name!,
         searchCity: editableSessionData.searchCity!,

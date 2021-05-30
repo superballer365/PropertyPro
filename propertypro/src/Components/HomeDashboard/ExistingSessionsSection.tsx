@@ -7,7 +7,7 @@ import SessionData from "../../Models/Session";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import EditSessionDialog from "./EditSessionDialog";
-import { useSessions } from "../../Utils/Hooks";
+import { useDeleteSession, useSessions } from "../../Utils/Hooks";
 
 export default function ExistingSessionsSection() {
   const {
@@ -64,7 +64,8 @@ interface ISessionEntryProps {
 }
 
 function SessionEntry({ sessionData, onEditClick }: ISessionEntryProps) {
-  const { deleteSession, markDirty } = React.useContext(SessionContext);
+  const deleteSessionMutation = useDeleteSession();
+
   const [deletingSession, setDeletingSession] = React.useState(false);
 
   const history = useHistory();
@@ -73,15 +74,8 @@ function SessionEntry({ sessionData, onEditClick }: ISessionEntryProps) {
     if (deletingSession) return;
 
     setDeletingSession(true);
-    const deleted = await deleteSession(sessionData.id!);
+    await deleteSessionMutation.mutateAsync(sessionData.id!);
     setDeletingSession(false);
-
-    if (deleted) {
-      markDirty();
-    } else {
-      // should throw toast
-      console.log("Failed to delete session!");
-    }
   }
 
   function handleEditClick() {
