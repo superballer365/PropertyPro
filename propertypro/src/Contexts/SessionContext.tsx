@@ -3,13 +3,18 @@ import {
   CreateSessionMutation,
   DeleteSessionMutation,
   ListSessionsQuery,
+  UpdateSessionInput,
 } from "../API";
 import callGraphQL from "../graphql/callGraphQL";
-import { createSession, deleteSession } from "../graphql/mutations";
+import {
+  createSession,
+  updateSession,
+  deleteSession,
+} from "../graphql/mutations";
 import { listSessions } from "../graphql/queries";
 import SessionData, {
   mapListSessions,
-  sessionDataToCreateSessionInput,
+  sessionDataToApiSessionInput,
 } from "../Models/Session";
 
 interface ISessionContextState {
@@ -18,6 +23,7 @@ interface ISessionContextState {
   loadingSessions: boolean;
   setSelectedSession: (session: SessionData) => void;
   createSession: (newSession: SessionData) => Promise<boolean>;
+  updateSession: (updatedSession: SessionData) => Promise<boolean>;
   deleteSession: (sessionId: string) => Promise<boolean>;
   markDirty: () => void;
 }
@@ -28,13 +34,13 @@ const defaultState: ISessionContextState = {
   loadingSessions: false,
   setSelectedSession: () => {},
   createSession: () => Promise.resolve(false),
+  updateSession: () => Promise.resolve(false),
   deleteSession: () => Promise.resolve(false),
   markDirty: () => {},
 };
 
-export const SessionContext = React.createContext<ISessionContextState>(
-  defaultState
-);
+export const SessionContext =
+  React.createContext<ISessionContextState>(defaultState);
 
 export default function SessionContextProvider({
   children,
@@ -49,7 +55,7 @@ export default function SessionContextProvider({
   const createSessionHandler = React.useCallback(
     async (newSession: SessionData) => {
       try {
-        const createSessionInput = sessionDataToCreateSessionInput(newSession);
+        const createSessionInput = sessionDataToApiSessionInput(newSession);
         const response = await callGraphQL<CreateSessionMutation>(
           createSession,
           {
@@ -59,10 +65,28 @@ export default function SessionContextProvider({
         if (!!response.errors) {
           console.error("Failed to create session: " + response.errors);
           return false;
-        } else {
-          return true;
         }
+        return true;
       } catch (err) {
+        return false;
+      }
+    },
+    []
+  );
+
+  const updateSessionHandler = React.useCallback(
+    async (updatedSession: SessionData) => {
+      try {
+        const sessionUpdateInput = sessionDataToApiSessionInput(updatedSession);
+        const response = await callGraphQL<UpdateSessionInput>(updateSession, {
+          input: sessionUpdateInput,
+        });
+        if (!!response.errors) {
+          console.error("Failed to update session: " + response.errors);
+          return false;
+        }
+        return true;
+      } catch (error) {
         return false;
       }
     },
@@ -77,9 +101,8 @@ export default function SessionContextProvider({
       if (!!response.errors) {
         console.error("Failed to delete session: " + response.errors);
         return false;
-      } else {
-        return true;
       }
+      return true;
     } catch (err) {
       return false;
     }
@@ -120,6 +143,7 @@ export default function SessionContextProvider({
       setSelectedSession,
       markDirty: markDirtyHandler,
       createSession: createSessionHandler,
+      updateSession: updateSessionHandler,
       deleteSession: deleteSessionHandler,
     }),
     [
@@ -128,6 +152,7 @@ export default function SessionContextProvider({
       loadingSessions,
       markDirtyHandler,
       createSessionHandler,
+      updateSessionHandler,
       deleteSessionHandler,
     ]
   );

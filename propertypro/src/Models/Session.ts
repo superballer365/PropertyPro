@@ -9,7 +9,7 @@ interface SessionData {
   searchBounds: BoundingBox;
 }
 
-export function sessionDataToCreateSessionInput(
+export function sessionDataToApiSessionInput(
   sessionData: SessionData
 ): CreateSessionInput {
   return {
