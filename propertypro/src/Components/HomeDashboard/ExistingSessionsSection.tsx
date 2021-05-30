@@ -1,26 +1,20 @@
 import React from "react";
-import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "react-bootstrap/Card";
 import { SessionContext } from "../../Contexts/SessionContext";
-import SessionData, { mapListSessions } from "../../Models/Session";
+import SessionData from "../../Models/Session";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import EditSessionDialog from "./EditSessionDialog";
-import { ListSessionsQuery } from "../../API";
-import callGraphQL from "../../graphql/callGraphQL";
-import { listSessions } from "../../graphql/queries";
+import { useSessions } from "../../Utils/Hooks";
 
 export default function ExistingSessionsSection() {
   const {
     isLoading: loadingSessions,
     isError,
     data: existingSessions,
-  } = useQuery<SessionData[]>("sessions", async () => {
-    const result = await callGraphQL<ListSessionsQuery>(listSessions);
-    return mapListSessions(result);
-  });
+  } = useSessions();
 
   const [sessionToEdit, setSessionToEdit] =
     React.useState<SessionData | undefined>(undefined);

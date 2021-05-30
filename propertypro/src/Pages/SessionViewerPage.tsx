@@ -7,6 +7,7 @@ import SessionViewerDashboard from "../Components/SessionViewerDashboard/Session
 import callGraphQL from "../graphql/callGraphQL";
 import { getSession } from "../graphql/queries";
 import SessionData, { mapGetSession } from "../Models/Session";
+import { useSession } from "../Utils/Hooks";
 import ErrorPage from "./ErrorPage";
 
 interface RouteParams {
@@ -20,13 +21,8 @@ export default function SessionViewerPage() {
     isLoading: loadingSessions,
     isError,
     data: matchingSession,
-  } = useQuery<SessionData | undefined>(["session", sessionId], async () => {
-    console.log(sessionId);
-    const result = await callGraphQL<GetSessionQuery>(getSession, {
-      id: sessionId,
-    });
-    return mapGetSession(result);
-  });
+  } = useSession(sessionId);
+
   const [sessionLoadError, setSessionLoadError] = React.useState(false);
   const [sessionFromRoute, setSessionFromRoute] = React.useState<SessionData>();
 
@@ -50,7 +46,9 @@ export default function SessionViewerPage() {
     return (
       <ErrorPage text="Could not find a session matching the specified id." />
     );
+
   if (loadingSessions || !sessionFromRoute)
     return <LoadingSpinner text="loading session..." />;
+
   return <SessionViewerDashboard session={sessionFromRoute} />;
 }
