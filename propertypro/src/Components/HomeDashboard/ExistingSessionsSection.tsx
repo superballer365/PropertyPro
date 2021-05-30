@@ -6,7 +6,7 @@ import { SessionContext } from "../../Contexts/SessionContext";
 import SessionData from "../../Models/Session";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import SessionDialog from "./SessionDialog";
+import EditSessionDialog from "./EditSessionDialog";
 
 export default function ExistingSessionsSection() {
   const { sessions: existingSessions, loadingSessions } =
@@ -39,10 +39,8 @@ export default function ExistingSessionsSection() {
 
   return (
     <>
-      {isEditing && (
-        <SessionDialog
-          type="update"
-          open={isEditing}
+      {sessionToEdit && (
+        <EditSessionDialog
           session={sessionToEdit}
           onClose={() => setSessionToEdit(undefined)}
         />

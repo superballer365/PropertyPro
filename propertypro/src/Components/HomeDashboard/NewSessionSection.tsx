@@ -2,7 +2,7 @@ import React from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
 import customStyles from "./NewSessionSection.module.scss";
-import SessionDialog from "./SessionDialog";
+import NewSessionDialog from "./NewSessionDialog";
 
 export default function NewSessionSection() {
   const [showingModal, setShowingModal] = React.useState(false);
@@ -10,11 +10,7 @@ export default function NewSessionSection() {
   return (
     <>
       {showingModal && (
-        <SessionDialog
-          type="create"
-          open={showingModal}
-          onClose={() => setShowingModal(false)}
-        />
+        <NewSessionDialog onClose={() => setShowingModal(false)} />
       )}
       <Jumbotron className={customStyles.jumbotron}>
         <h4>Create a new search session!</h4>
