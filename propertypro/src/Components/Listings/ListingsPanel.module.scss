@@ -1,0 +1,17 @@
+.container {
+  width: 300px;
+  height: 100%;
+
+  .card {
+    height: 100%;
+
+    .header {
+      display: flex;
+      align-items: center;
+
+      .title {
+        flex-grow: 1;
+      }
+    }
+  }
+}
