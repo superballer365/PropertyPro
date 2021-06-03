@@ -5,8 +5,11 @@ import ListGroup from "react-bootstrap/ListGroup";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import styles from "./ListingsPanel.module.scss";
 import SessionData from "../../Models/Session";
+import NewListingDialog from "./NewListingDialog";
 
 export default function ListingsPanel({ session }: IProps) {
+  const [creatingNewListing, setCreatingNewListing] = React.useState(false);
+
   function getContent() {
     if (!session.listings || session.listings.length < 1) return "No listings";
 
@@ -20,15 +23,23 @@ export default function ListingsPanel({ session }: IProps) {
   }
 
   return (
-    <div className={styles.container}>
-      <Card className={styles.card}>
-        <Card.Header className={styles.header}>
-          <span className={styles.title}>Listings</span>
-          <Button>+</Button>
-        </Card.Header>
-        <Card.Body>{getContent()}</Card.Body>
-      </Card>
-    </div>
+    <>
+      {creatingNewListing && (
+        <NewListingDialog
+          session={session}
+          onClose={() => setCreatingNewListing(false)}
+        />
+      )}
+      <div className={styles.container}>
+        <Card className={styles.card}>
+          <Card.Header className={styles.header}>
+            <span className={styles.title}>Listings</span>
+            <Button onClick={() => setCreatingNewListing(true)}>+</Button>
+          </Card.Header>
+          <Card.Body>{getContent()}</Card.Body>
+        </Card>
+      </div>
+    </>
   );
 }
 
