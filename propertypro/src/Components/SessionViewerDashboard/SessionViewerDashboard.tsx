@@ -11,7 +11,7 @@ interface IProps {
 export default function SessionViewerDashboard({ session }: IProps) {
   return (
     <div className={styles.container}>
-      <ListingsPanel />
+      <ListingsPanel session={session} />
       <div className={styles.mapContainer}>
         <Map session={session} />
       </div>
