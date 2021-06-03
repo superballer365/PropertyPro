@@ -22,6 +22,7 @@ export type CoordinateInput = {
 
 export type ListingInput = {
   id: string,
+  name: string,
   address: string,
   location: CoordinateInput,
 };
@@ -100,6 +101,7 @@ export type Coordinate = {
 export type Listing = {
   __typename: "Listing",
   id?: string,
+  name?: string,
   address?: string,
   location?: Coordinate,
 };
@@ -174,6 +176,7 @@ export type CreateSessionMutation = {
     listings?:  Array< {
       __typename: "Listing",
       id: string,
+      name: string,
       address: string,
       location:  {
         __typename: "Coordinate",
@@ -213,6 +216,7 @@ export type UpdateSessionMutation = {
     listings?:  Array< {
       __typename: "Listing",
       id: string,
+      name: string,
       address: string,
       location:  {
         __typename: "Coordinate",
@@ -252,6 +256,7 @@ export type DeleteSessionMutation = {
     listings?:  Array< {
       __typename: "Listing",
       id: string,
+      name: string,
       address: string,
       location:  {
         __typename: "Coordinate",
@@ -290,6 +295,7 @@ export type GetSessionQuery = {
     listings?:  Array< {
       __typename: "Listing",
       id: string,
+      name: string,
       address: string,
       location:  {
         __typename: "Coordinate",
@@ -332,6 +338,7 @@ export type ListSessionsQuery = {
       listings?:  Array< {
         __typename: "Listing",
         id: string,
+        name: string,
         address: string,
         location:  {
           __typename: "Coordinate",
@@ -368,6 +375,7 @@ export type OnCreateSessionSubscription = {
     listings?:  Array< {
       __typename: "Listing",
       id: string,
+      name: string,
       address: string,
       location:  {
         __typename: "Coordinate",
@@ -402,6 +410,7 @@ export type OnUpdateSessionSubscription = {
     listings?:  Array< {
       __typename: "Listing",
       id: string,
+      name: string,
       address: string,
       location:  {
         __typename: "Coordinate",
@@ -436,6 +445,7 @@ export type OnDeleteSessionSubscription = {
     listings?:  Array< {
       __typename: "Listing",
       id: string,
+      name: string,
       address: string,
       location:  {
         __typename: "Coordinate",

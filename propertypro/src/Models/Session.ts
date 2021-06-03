@@ -17,6 +17,7 @@ interface SessionData {
 
 interface Listing {
   id: string;
+  name: string;
   address: string;
   location: Coordinate;
 }

@@ -20,6 +20,7 @@ export const getSession = /* GraphQL */ `
       }
       listings {
         id
+        name
         address
         location {
           lat
@@ -54,6 +55,7 @@ export const listSessions = /* GraphQL */ `
         }
         listings {
           id
+          name
           address
           location {
             lat

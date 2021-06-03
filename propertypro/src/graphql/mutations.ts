@@ -23,6 +23,7 @@ export const createSession = /* GraphQL */ `
       }
       listings {
         id
+        name
         address
         location {
           lat
@@ -55,6 +56,7 @@ export const updateSession = /* GraphQL */ `
       }
       listings {
         id
+        name
         address
         location {
           lat
@@ -87,6 +89,7 @@ export const deleteSession = /* GraphQL */ `
       }
       listings {
         id
+        name
         address
         location {
           lat

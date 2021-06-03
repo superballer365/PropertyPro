@@ -8,6 +8,7 @@ type Session @model {
 
 type Listing {
   id: ID!
+  name: String!
   address: String!
   location: Coordinate!
 }
