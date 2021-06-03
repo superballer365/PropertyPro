@@ -7,6 +7,7 @@ export type CreateSessionInput = {
   name: string,
   searchCity: string,
   searchBounds: BoundingBoxInput,
+  listings?: Array< ListingInput > | null,
 };
 
 export type BoundingBoxInput = {
@@ -17,6 +18,12 @@ export type BoundingBoxInput = {
 export type CoordinateInput = {
   lat: number,
   lng: number,
+};
+
+export type ListingInput = {
+  id: string,
+  address: string,
+  location: CoordinateInput,
 };
 
 export type ModelSessionConditionInput = {
@@ -73,6 +80,7 @@ export type Session = {
   name?: string,
   searchCity?: string,
   searchBounds?: BoundingBox,
+  listings?:  Array<Listing > | null,
   createdAt?: string,
   updatedAt?: string,
 };
@@ -89,11 +97,19 @@ export type Coordinate = {
   lng?: number,
 };
 
+export type Listing = {
+  __typename: "Listing",
+  id?: string,
+  address?: string,
+  location?: Coordinate,
+};
+
 export type UpdateSessionInput = {
   id: string,
   name?: string | null,
   searchCity?: string | null,
   searchBounds?: BoundingBoxInput | null,
+  listings?: Array< ListingInput > | null,
 };
 
 export type DeleteSessionInput = {
@@ -155,6 +171,16 @@ export type CreateSessionMutation = {
         lng: number,
       },
     },
+    listings?:  Array< {
+      __typename: "Listing",
+      id: string,
+      address: string,
+      location:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    } > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -184,6 +210,16 @@ export type UpdateSessionMutation = {
         lng: number,
       },
     },
+    listings?:  Array< {
+      __typename: "Listing",
+      id: string,
+      address: string,
+      location:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    } > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -213,6 +249,16 @@ export type DeleteSessionMutation = {
         lng: number,
       },
     },
+    listings?:  Array< {
+      __typename: "Listing",
+      id: string,
+      address: string,
+      location:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    } > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -241,6 +287,16 @@ export type GetSessionQuery = {
         lng: number,
       },
     },
+    listings?:  Array< {
+      __typename: "Listing",
+      id: string,
+      address: string,
+      location:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    } > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -273,6 +329,16 @@ export type ListSessionsQuery = {
           lng: number,
         },
       },
+      listings?:  Array< {
+        __typename: "Listing",
+        id: string,
+        address: string,
+        location:  {
+          __typename: "Coordinate",
+          lat: number,
+          lng: number,
+        },
+      } > | null,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -299,6 +365,16 @@ export type OnCreateSessionSubscription = {
         lng: number,
       },
     },
+    listings?:  Array< {
+      __typename: "Listing",
+      id: string,
+      address: string,
+      location:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    } > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -323,6 +399,16 @@ export type OnUpdateSessionSubscription = {
         lng: number,
       },
     },
+    listings?:  Array< {
+      __typename: "Listing",
+      id: string,
+      address: string,
+      location:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    } > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -347,6 +433,16 @@ export type OnDeleteSessionSubscription = {
         lng: number,
       },
     },
+    listings?:  Array< {
+      __typename: "Listing",
+      id: string,
+      address: string,
+      location:  {
+        __typename: "Coordinate",
+        lat: number,
+        lng: number,
+      },
+    } > | null,
     createdAt: string,
     updatedAt: string,
   } | null,

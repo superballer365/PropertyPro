@@ -21,6 +21,14 @@ export const createSession = /* GraphQL */ `
           lng
         }
       }
+      listings {
+        id
+        address
+        location {
+          lat
+          lng
+        }
+      }
       createdAt
       updatedAt
     }
@@ -45,6 +53,14 @@ export const updateSession = /* GraphQL */ `
           lng
         }
       }
+      listings {
+        id
+        address
+        location {
+          lat
+          lng
+        }
+      }
       createdAt
       updatedAt
     }
@@ -65,6 +81,14 @@ export const deleteSession = /* GraphQL */ `
           lng
         }
         topRight {
+          lat
+          lng
+        }
+      }
+      listings {
+        id
+        address
+        location {
           lat
           lng
         }

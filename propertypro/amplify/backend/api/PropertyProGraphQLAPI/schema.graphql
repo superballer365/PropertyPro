@@ -3,6 +3,13 @@ type Session @model {
   name: String!
   searchCity: String!
   searchBounds: BoundingBox!
+  listings: [Listing!]
+}
+
+type Listing {
+  id: ID!
+  address: String!
+  location: Coordinate!
 }
 
 type Coordinate {

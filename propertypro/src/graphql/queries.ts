@@ -18,6 +18,14 @@ export const getSession = /* GraphQL */ `
           lng
         }
       }
+      listings {
+        id
+        address
+        location {
+          lat
+          lng
+        }
+      }
       createdAt
       updatedAt
     }
@@ -40,6 +48,14 @@ export const listSessions = /* GraphQL */ `
             lng
           }
           topRight {
+            lat
+            lng
+          }
+        }
+        listings {
+          id
+          address
+          location {
             lat
             lng
           }

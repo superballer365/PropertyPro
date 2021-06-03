@@ -5,13 +5,20 @@ import {
   UpdateSessionMutation,
 } from "../API";
 import { GraphQLResult } from "@aws-amplify/api";
-import { BoundingBox } from "../API/Google Places/Geocoding";
+import { BoundingBox, Coordinate } from "../API/Google Places/Geocoding";
 
 interface SessionData {
   id?: string;
   name: string;
   searchCity: string;
   searchBounds: BoundingBox;
+  listings?: Listing[] | null;
+}
+
+interface Listing {
+  id: string;
+  address: string;
+  location: Coordinate;
 }
 
 export function sessionDataToApiSessionInput(
@@ -36,6 +43,7 @@ function mapListSessionsQuery(
           name: session?.name,
           searchCity: session?.searchCity,
           searchBounds: session?.searchBounds,
+          listings: session?.listings,
         } as SessionData)
     ) ?? []
   );
