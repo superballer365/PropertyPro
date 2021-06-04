@@ -1,4 +1,5 @@
 import React from "react";
+import { ListingContextProvider } from "../../Contexts/ListingContext";
 import SessionData from "../../Models/Session";
 import ListingsPanel from "../Listings/ListingsPanel";
 import Map from "../Map/Map";
@@ -10,11 +11,13 @@ interface IProps {
 
 export default function SessionViewerDashboard({ session }: IProps) {
   return (
-    <div className={styles.container}>
-      <ListingsPanel session={session} />
-      <div className={styles.mapContainer}>
-        <Map session={session} />
+    <ListingContextProvider>
+      <div className={styles.container}>
+        <ListingsPanel session={session} />
+        <div className={styles.mapContainer}>
+          <Map session={session} />
+        </div>
       </div>
-    </div>
+    </ListingContextProvider>
   );
 }

@@ -5,9 +5,25 @@ import styles from "./ListingsPanel.module.scss";
 import SessionData from "../../Models/Session";
 import NewListingDialog from "./NewListingDialog";
 import ListingsList from "./ListingsList";
+import { ListingContext } from "../../Contexts/ListingContext";
 
 export default function ListingsPanel({ session }: IProps) {
+  const { selectedListing } = React.useContext(ListingContext);
+
   const [creatingNewListing, setCreatingNewListing] = React.useState(false);
+
+  function getContent() {
+    // if we have a selected listing, show it
+    if (selectedListing) return <div>{selectedListing.name}</div>;
+
+    // otherwise, render the list of listings
+    return (
+      <ListingsList
+        onCreateNewListingClick={() => setCreatingNewListing(true)}
+        session={session}
+      />
+    );
+  }
 
   return (
     <>
@@ -17,15 +33,7 @@ export default function ListingsPanel({ session }: IProps) {
           onClose={() => setCreatingNewListing(false)}
         />
       )}
-      <div className={styles.container}>
-        <Card className={styles.card}>
-          <Card.Header className={styles.header}>
-            <span className={styles.title}>Listings</span>
-            <Button onClick={() => setCreatingNewListing(true)}>+</Button>
-          </Card.Header>
-          <ListingsList session={session} />
-        </Card>
-      </div>
+      <div className={styles.container}>{getContent()}</div>
     </>
   );
 }
