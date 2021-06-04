@@ -43,14 +43,28 @@ interface IListingsListProps {
 }
 
 function ListingsListItem({ listing }: IListingsListItemProps) {
-  const { setSelectedListing } = React.useContext(ListingContext);
+  const { setSelectedListing, addHoveredListingId, removeHoveredListingId } =
+    React.useContext(ListingContext);
 
   function handleClick() {
     setSelectedListing(listing);
   }
 
+  function handleListingHover() {
+    addHoveredListingId(listing.id);
+  }
+
+  function handleListingUnhover() {
+    removeHoveredListingId(listing.id);
+  }
+
   return (
-    <ListGroupItem className={styles.listItem} onClick={handleClick}>
+    <ListGroupItem
+      className={styles.listItem}
+      onClick={handleClick}
+      onMouseEnter={handleListingHover}
+      onMouseLeave={handleListingUnhover}
+    >
       {listing.name}
     </ListGroupItem>
   );

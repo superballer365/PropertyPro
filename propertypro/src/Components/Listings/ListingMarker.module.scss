@@ -12,12 +12,12 @@ $K_HEIGHT_HOVERED: 35px;
   height: $K_HEIGHT;
   left: -$K_WIDTH / 2;
   top: -$K_HEIGHT / 2;
+}
 
-  &:hover {
-    cursor: pointer;
-    width: $K_WIDTH_HOVERED;
-    height: $K_HEIGHT_HOVERED;
-    left: -$K_WIDTH_HOVERED / 2;
-    top: -$K_HEIGHT_HOVERED / 2;
-  }
+.hovered {
+  cursor: pointer;
+  width: $K_WIDTH_HOVERED;
+  height: $K_HEIGHT_HOVERED;
+  left: -$K_WIDTH_HOVERED / 2;
+  top: -$K_HEIGHT_HOVERED / 2;
 }

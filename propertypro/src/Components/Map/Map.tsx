@@ -10,8 +10,13 @@ interface IProps {
 }
 
 export default function Map({ session }: IProps) {
-  const { selectedListing, setSelectedListing } =
-    React.useContext(ListingContext);
+  const {
+    selectedListing,
+    hoveredListingIds,
+    setSelectedListing,
+    addHoveredListingId,
+    removeHoveredListingId,
+  } = React.useContext(ListingContext);
 
   const [zoom, setZoom] = React.useState<number>();
   const [center, setCenter] = React.useState<Coordinate>();
@@ -59,6 +64,14 @@ export default function Map({ session }: IProps) {
     setSelectedListing(markerProps.listing);
   }
 
+  function handleMarkerHover(key: string, markerProps: ListingMarkerProps) {
+    addHoveredListingId(key);
+  }
+
+  function handleMarkerUnhover(key: string, markerProps: ListingMarkerProps) {
+    removeHoveredListingId(key);
+  }
+
   return (
     <div ref={mapContainerRef} style={{ height: "100%" }}>
       {center && zoom && (
@@ -67,12 +80,15 @@ export default function Map({ session }: IProps) {
           center={center}
           zoom={zoom}
           onChildClick={handleMarkerClick}
+          onChildMouseEnter={handleMarkerHover}
+          onChildMouseLeave={handleMarkerUnhover}
           yesIWantToUseGoogleMapApiInternals={true}
         >
           {session.listings?.map((listing) => (
             <ListingMarker
               key={listing.id}
               listing={listing}
+              hovered={hoveredListingIds.includes(listing.id)}
               lat={listing.location.lat}
               lng={listing.location.lng}
             />
