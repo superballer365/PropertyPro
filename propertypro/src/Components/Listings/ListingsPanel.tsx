@@ -1,27 +1,13 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import ListGroup from "react-bootstrap/ListGroup";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
 import styles from "./ListingsPanel.module.scss";
 import SessionData from "../../Models/Session";
 import NewListingDialog from "./NewListingDialog";
+import ListingsList from "./ListingsList";
 
 export default function ListingsPanel({ session }: IProps) {
   const [creatingNewListing, setCreatingNewListing] = React.useState(false);
-
-  function getContent() {
-    if (!session.listings || session.listings.length < 1)
-      return <Card.Body>No listings</Card.Body>;
-
-    return (
-      <ListGroup>
-        {session.listings.map((listing) => (
-          <ListGroupItem key={listing.id}>{listing.name}</ListGroupItem>
-        ))}
-      </ListGroup>
-    );
-  }
 
   return (
     <>
@@ -37,7 +23,7 @@ export default function ListingsPanel({ session }: IProps) {
             <span className={styles.title}>Listings</span>
             <Button onClick={() => setCreatingNewListing(true)}>+</Button>
           </Card.Header>
-          {getContent()}
+          <ListingsList session={session} />
         </Card>
       </div>
     </>
