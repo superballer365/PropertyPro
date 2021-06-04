@@ -2,7 +2,7 @@ import React from "react";
 import GoogleMapReact, { fitBounds } from "google-map-react";
 import { Coordinate } from "../../API/Google Places/Geocoding";
 import SessionData from "../../Models/Session";
-import ListingMarker from "../Listings/ListingMarker";
+import ListingMarker, { ListingMarkerProps } from "../Listings/ListingMarker";
 import { ListingContext } from "../../Contexts/ListingContext";
 
 interface IProps {
@@ -10,7 +10,8 @@ interface IProps {
 }
 
 export default function Map({ session }: IProps) {
-  const { selectedListing } = React.useContext(ListingContext);
+  const { selectedListing, setSelectedListing } =
+    React.useContext(ListingContext);
 
   const [zoom, setZoom] = React.useState<number>();
   const [center, setCenter] = React.useState<Coordinate>();
@@ -54,6 +55,10 @@ export default function Map({ session }: IProps) {
     setCenter(defaultCenterRef.current);
   }, [selectedListing]);
 
+  function handleMarkerClick(key: string, markerProps: ListingMarkerProps) {
+    setSelectedListing(markerProps.listing);
+  }
+
   return (
     <div ref={mapContainerRef} style={{ height: "100%" }}>
       {center && zoom && (
@@ -61,15 +66,13 @@ export default function Map({ session }: IProps) {
           bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY! }}
           center={center}
           zoom={zoom}
-          options={{
-            streetViewControl: true,
-            mapTypeControl: true,
-            fullscreenControl: false,
-          }}
+          onChildClick={handleMarkerClick}
           yesIWantToUseGoogleMapApiInternals={true}
         >
           {session.listings?.map((listing) => (
             <ListingMarker
+              key={listing.id}
+              listing={listing}
               lat={listing.location.lat}
               lng={listing.location.lng}
             />
