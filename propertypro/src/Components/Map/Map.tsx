@@ -3,14 +3,21 @@ import GoogleMapReact, { fitBounds } from "google-map-react";
 import { Coordinate } from "../../API/Google Places/Geocoding";
 import SessionData from "../../Models/Session";
 import ListingMarker from "../Listings/ListingMarker";
+import { ListingContext } from "../../Contexts/ListingContext";
 
 interface IProps {
   session: SessionData;
 }
 
 export default function Map({ session }: IProps) {
-  const [defaultZoom, setDefaultZoom] = React.useState<number>();
-  const [defaultCenter, setDefaultCenter] = React.useState<Coordinate>();
+  const { selectedListing } = React.useContext(ListingContext);
+
+  const [zoom, setZoom] = React.useState<number>();
+  const [center, setCenter] = React.useState<Coordinate>();
+
+  // default zoom and center, to be used for resetting
+  const defaultZoomRef = React.useRef<number>();
+  const defaultCenterRef = React.useRef<Coordinate>();
   const mapContainerRef = React.useRef<HTMLDivElement>(null);
 
   // get zoom level and center for map bounds on first load
@@ -27,18 +34,33 @@ export default function Map({ session }: IProps) {
       },
       { width: mapContainerRect?.width, height: mapContainerRect?.height }
     );
-    setDefaultCenter(center);
-    setDefaultZoom(zoom);
+    setCenter(center);
+    setZoom(zoom);
+    defaultCenterRef.current = center;
+    defaultZoomRef.current = zoom;
     loaded.current = true;
   }, [session]);
 
+  // update the zoom and center when the selected listing changes
+  React.useEffect(() => {
+    if (selectedListing) {
+      setZoom(17);
+      setCenter(selectedListing.location);
+      return;
+    }
+
+    // reset the zoom and center if no listing is selected
+    setZoom(defaultZoomRef.current);
+    setCenter(defaultCenterRef.current);
+  }, [selectedListing]);
+
   return (
     <div ref={mapContainerRef} style={{ height: "100%" }}>
-      {defaultCenter && defaultZoom && (
+      {center && zoom && (
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY! }}
-          defaultCenter={defaultCenter}
-          defaultZoom={defaultZoom}
+          center={center}
+          zoom={zoom}
           options={{
             streetViewControl: true,
             mapTypeControl: true,
