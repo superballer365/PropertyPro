@@ -1,6 +1,9 @@
 $K_WIDTH: 25px;
 $K_HEIGHT: 25px;
 
+$K_WIDTH_HOVERED: 35px;
+$K_HEIGHT_HOVERED: 35px;
+
 .container {
   // initially any map object has left top corner at lat lng coordinates
   // it's on you to set object origin to 0;0 coordinates
@@ -9,4 +12,12 @@ $K_HEIGHT: 25px;
   height: $K_HEIGHT;
   left: -$K_WIDTH / 2;
   top: -$K_HEIGHT / 2;
+
+  &:hover {
+    cursor: pointer;
+    width: $K_WIDTH_HOVERED;
+    height: $K_HEIGHT_HOVERED;
+    left: -$K_WIDTH_HOVERED / 2;
+    top: -$K_HEIGHT_HOVERED / 2;
+  }
 }
