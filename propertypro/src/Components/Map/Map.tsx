@@ -2,6 +2,7 @@ import React from "react";
 import GoogleMapReact, { fitBounds } from "google-map-react";
 import { Coordinate } from "../../API/Google Places/Geocoding";
 import SessionData from "../../Models/Session";
+import ListingMarker from "../Listings/ListingMarker";
 
 interface IProps {
   session: SessionData;
@@ -44,7 +45,14 @@ export default function Map({ session }: IProps) {
             fullscreenControl: false,
           }}
           yesIWantToUseGoogleMapApiInternals={true}
-        ></GoogleMapReact>
+        >
+          {session.listings?.map((listing) => (
+            <ListingMarker
+              lat={listing.location.lat}
+              lng={listing.location.lng}
+            />
+          ))}
+        </GoogleMapReact>
       )}
     </div>
   );
