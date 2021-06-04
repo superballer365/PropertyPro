@@ -15,7 +15,8 @@ export default function ListingsPanel({ session }: IProps) {
 
   function getContent() {
     // if we have a selected listing, show it
-    if (selectedListing) return <ListingEditor listing={selectedListing} />;
+    if (selectedListing)
+      return <ListingEditor session={session} listing={selectedListing} />;
 
     // otherwise, render the list of listings
     return (
