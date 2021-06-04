@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { AutoCompleteSuggestion } from "../../API/Google Places";
+import { AutoCompleteSuggestion, SearchType } from "../../API/Google Places";
 import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
 import {
   BoundingBox,
@@ -79,6 +79,7 @@ export default function NewSessionDialog({ onClose }: IProps) {
             <AddressSearchBar
               onSelect={handleCitySelect}
               isInvalid={!!formDataErrors.searchCityError}
+              searchType={SearchType.City}
             />
             <Form.Control.Feedback type="invalid">
               {formDataErrors.nameError}

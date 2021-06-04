@@ -11,7 +11,8 @@ export default function ListingsPanel({ session }: IProps) {
   const [creatingNewListing, setCreatingNewListing] = React.useState(false);
 
   function getContent() {
-    if (!session.listings || session.listings.length < 1) return "No listings";
+    if (!session.listings || session.listings.length < 1)
+      return <Card.Body>No listings</Card.Body>;
 
     return (
       <ListGroup>
@@ -36,7 +37,7 @@ export default function ListingsPanel({ session }: IProps) {
             <span className={styles.title}>Listings</span>
             <Button onClick={() => setCreatingNewListing(true)}>+</Button>
           </Card.Header>
-          <Card.Body>{getContent()}</Card.Body>
+          {getContent()}
         </Card>
       </div>
     </>

@@ -15,7 +15,7 @@ interface SessionData {
   listings?: Listing[] | null;
 }
 
-interface Listing {
+export interface Listing {
   id: string;
   name: string;
   address: string;
@@ -30,6 +30,7 @@ export function sessionDataToApiSessionInput(
     id: sessionData.id,
     searchCity: sessionData.searchCity,
     searchBounds: sessionData.searchBounds,
+    listings: sessionData.listings,
   };
 }
 

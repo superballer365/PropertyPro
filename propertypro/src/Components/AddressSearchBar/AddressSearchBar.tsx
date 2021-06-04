@@ -10,12 +10,14 @@ interface IProps {
   onSelect: (selection: AutoCompleteSuggestion) => void;
   defaultInputValue?: string;
   isInvalid: boolean;
+  searchType: SearchType;
 }
 
 export default function AutoCompleteSearchBar({
   onSelect,
   defaultInputValue,
   isInvalid,
+  searchType,
 }: IProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [suggestions, setSuggestions] = React.useState<
@@ -26,7 +28,7 @@ export default function AutoCompleteSearchBar({
     setIsLoading(true);
     const autoCompleteResult = await googlePlacesAutoComplete(
       searchText,
-      SearchType.City
+      searchType
     );
     setSuggestions(autoCompleteResult.suggestions);
     setIsLoading(false);

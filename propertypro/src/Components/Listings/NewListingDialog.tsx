@@ -2,14 +2,15 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { AutoCompleteSuggestion } from "../../API/Google Places";
+import { AutoCompleteSuggestion, SearchType } from "../../API/Google Places";
 import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
 import {
-  BoundingBox,
+  Coordinate,
   geocodeByPlaceId,
 } from "../../API/Google Places/Geocoding";
+import { uuid } from "uuidv4";
 import { useUpdateSession } from "../../Utils/Hooks";
-import SessionData from "../../Models/Session";
+import SessionData, { Listing } from "../../Models/Session";
 
 export default function NewListingDialog({ onClose, session }: IProps) {
   const updateSessionMutation = useUpdateSession();
@@ -26,10 +27,16 @@ export default function NewListingDialog({ onClose, session }: IProps) {
     const errors = validateFormData(formData);
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
-      await updateSessionMutation.mutateAsync({
+      console.log("creating");
+      const newListing: Listing = {
+        id: uuid(),
         name: formData.name!,
-        searchCity: formData.searchCity!,
-        searchBounds: formData.searchBounds!,
+        address: formData.address!,
+        location: formData.location!,
+      };
+      await updateSessionMutation.mutateAsync({
+        ...session,
+        listings: (session.listings ?? []).concat(newListing),
       });
       onClose();
     }
@@ -38,13 +45,14 @@ export default function NewListingDialog({ onClose, session }: IProps) {
   async function handleAddressSelect(address: AutoCompleteSuggestion) {
     try {
       const addressGeocodingInfo = await geocodeByPlaceId(address.id);
-      console.log(addressGeocodingInfo);
-      // setFormData((prev) => ({
-      //   ...prev,
-      //   searchCity: city.name,
-      //   // there is guaranteed to be one result
-      //   searchBounds: cityGeocodingInfo[0].boundingBox,
-      // }));
+      // there is guaranteed to be one result
+      const addressInfo = addressGeocodingInfo[0];
+      console.log(addressInfo);
+      setFormData((prev) => ({
+        ...prev,
+        address: addressInfo.name,
+        location: addressInfo.location,
+      }));
     } catch (err) {
       // TODO: show toast and maybe clear the search?
       console.error("Failed to load location information.");
@@ -61,7 +69,7 @@ export default function NewListingDialog({ onClose, session }: IProps) {
           <Form.Group controlId="listingForm.Name">
             <Form.Label>Name</Form.Label>
             <Form.Control
-              type="session name"
+              type="listing name"
               value={formData.name ?? ""}
               onChange={(event: any) =>
                 setFormData((prev) => ({
@@ -79,7 +87,8 @@ export default function NewListingDialog({ onClose, session }: IProps) {
             <Form.Label>Address</Form.Label>
             <AddressSearchBar
               onSelect={handleAddressSelect}
-              isInvalid={!!formDataErrors.searchCityError}
+              isInvalid={!!formDataErrors.addressError}
+              searchType={SearchType.Address}
             />
             <Form.Control.Feedback type="invalid">
               {formDataErrors.nameError}
@@ -106,48 +115,48 @@ interface IProps {
 
 interface CreateListingFormData {
   name?: string;
-  searchCity?: string;
-  searchBounds?: BoundingBox;
+  address?: string;
+  location?: Coordinate;
 }
 
 const DEFAULT_FORM_DATA: CreateListingFormData = {
   name: undefined,
-  searchCity: undefined,
-  searchBounds: undefined,
+  address: undefined,
+  location: undefined,
 };
 
 interface FormDataErrors {
   nameError?: string;
-  searchCityError?: string;
-  searchBoundsError?: string;
+  addressError?: string;
+  locationError?: string;
 }
 
 const DEFAULT_DATA_ERRORS: FormDataErrors = {
   nameError: undefined,
-  searchCityError: undefined,
-  searchBoundsError: undefined,
+  addressError: undefined,
+  locationError: undefined,
 };
 
 function validateFormData(formData: CreateListingFormData): FormDataErrors {
   let nameError;
-  let searchCityError;
-  let searchBoundsError;
+  let addressError;
+  let locationError;
 
   if (!formData.name) {
-    nameError = "Must provide name for session";
+    nameError = "Must provide name for listing";
   }
-  if (!formData.searchCity) {
-    console.log("search city error");
-    searchCityError = "Must enter a search city";
+  if (!formData.address) {
+    console.log("address error");
+    addressError = "Must enter an address";
   }
-  if (!formData.searchBounds) {
-    searchBoundsError = "Search bounds must be computed";
+  if (!formData.location) {
+    locationError = "Could not find address for location";
   }
 
   return {
     nameError,
-    searchCityError,
-    searchBoundsError,
+    addressError,
+    locationError,
   };
 }
 
