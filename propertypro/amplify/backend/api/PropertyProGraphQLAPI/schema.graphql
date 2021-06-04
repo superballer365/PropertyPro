@@ -11,6 +11,9 @@ type Listing {
   name: String!
   address: String!
   location: Coordinate!
+  price: Float!
+  numberOfBedrooms: Int!
+  numberOfBathrooms: Int!
 }
 
 type Coordinate {

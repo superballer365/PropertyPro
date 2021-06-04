@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
 import { AutoCompleteSuggestion, SearchType } from "../../API/Google Places";
 import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
 import {
@@ -27,12 +28,14 @@ export default function NewListingDialog({ onClose, session }: IProps) {
     const errors = validateFormData(formData);
     setFormDataErrors(errors);
     if (!hasErrors(errors)) {
-      console.log("creating");
       const newListing: Listing = {
         id: uuid(),
         name: formData.name!,
         address: formData.address!,
         location: formData.location!,
+        price: formData.price!,
+        numberOfBedrooms: formData.numberOfBedrooms!,
+        numberOfBathrooms: formData.numberOfBathrooms!,
       };
       await updateSessionMutation.mutateAsync({
         ...session,
@@ -94,6 +97,59 @@ export default function NewListingDialog({ onClose, session }: IProps) {
               {formDataErrors.nameError}
             </Form.Control.Feedback>
           </Form.Group>
+          <Form.Group controlId="listingForm.Price">
+            <Form.Label>Price</Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.price ?? ""}
+              onChange={(event: any) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  price: event.target.value,
+                }))
+              }
+              isInvalid={!!formDataErrors.priceError}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formDataErrors.priceError}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Row>
+            <Form.Group as={Col} controlId="listingForm.bedrooms">
+              <Form.Label>Bedrooms</Form.Label>
+              <Form.Control
+                type="number"
+                value={formData.numberOfBedrooms ?? ""}
+                onChange={(event: any) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    numberOfBedrooms: event.target.value,
+                  }))
+                }
+                isInvalid={!!formDataErrors.numberOfBedroomsError}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formDataErrors.numberOfBedroomsError}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="listingForm.bathrooms">
+              <Form.Label>Bathrooms</Form.Label>
+              <Form.Control
+                type="number"
+                value={formData.numberOfBathrooms ?? ""}
+                onChange={(event: any) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    numberOfBathrooms: event.target.value,
+                  }))
+                }
+                isInvalid={!!formDataErrors.numberOfBathroomsError}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formDataErrors.numberOfBathroomsError}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form.Row>
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -117,46 +173,75 @@ interface CreateListingFormData {
   name?: string;
   address?: string;
   location?: Coordinate;
+  price?: number;
+  numberOfBedrooms?: number;
+  numberOfBathrooms?: number;
 }
 
 const DEFAULT_FORM_DATA: CreateListingFormData = {
   name: undefined,
   address: undefined,
   location: undefined,
+  price: undefined,
+  numberOfBedrooms: undefined,
+  numberOfBathrooms: undefined,
 };
 
 interface FormDataErrors {
   nameError?: string;
   addressError?: string;
   locationError?: string;
+  priceError?: string;
+  numberOfBedroomsError?: string;
+  numberOfBathroomsError?: string;
 }
 
 const DEFAULT_DATA_ERRORS: FormDataErrors = {
   nameError: undefined,
   addressError: undefined,
   locationError: undefined,
+  priceError: undefined,
+  numberOfBedroomsError: undefined,
+  numberOfBathroomsError: undefined,
 };
 
 function validateFormData(formData: CreateListingFormData): FormDataErrors {
-  let nameError;
-  let addressError;
-  let locationError;
+  let nameError,
+    addressError,
+    locationError,
+    priceError,
+    numberOfBedroomsError,
+    numberOfBathroomsError;
 
   if (!formData.name) {
     nameError = "Must provide name for listing";
   }
   if (!formData.address) {
-    console.log("address error");
     addressError = "Must enter an address";
   }
   if (!formData.location) {
     locationError = "Could not find address for location";
   }
 
+  if (!formData.price) {
+    priceError = "Must provide a price for the listing";
+  }
+
+  if (!formData.numberOfBedrooms) {
+    numberOfBedroomsError = "Must provide a number of bedrooms";
+  }
+
+  if (!formData.numberOfBathrooms) {
+    numberOfBathroomsError = "Must provide a number of bathrooms";
+  }
+
   return {
     nameError,
     addressError,
     locationError,
+    priceError,
+    numberOfBedroomsError,
+    numberOfBathroomsError,
   };
 }
 

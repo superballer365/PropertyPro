@@ -20,6 +20,9 @@ export interface Listing {
   name: string;
   address: string;
   location: Coordinate;
+  price: number;
+  numberOfBedrooms: number;
+  numberOfBathrooms: number;
 }
 
 export function sessionDataToApiSessionInput(

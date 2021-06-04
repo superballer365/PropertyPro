@@ -29,6 +29,9 @@ export const createSession = /* GraphQL */ `
           lat
           lng
         }
+        price
+        numberOfBedrooms
+        numberOfBathrooms
       }
       createdAt
       updatedAt
@@ -62,6 +65,9 @@ export const updateSession = /* GraphQL */ `
           lat
           lng
         }
+        price
+        numberOfBedrooms
+        numberOfBathrooms
       }
       createdAt
       updatedAt
@@ -95,6 +101,9 @@ export const deleteSession = /* GraphQL */ `
           lat
           lng
         }
+        price
+        numberOfBedrooms
+        numberOfBathrooms
       }
       createdAt
       updatedAt
