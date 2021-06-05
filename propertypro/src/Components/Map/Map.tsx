@@ -83,6 +83,11 @@ export default function Map({ session }: IProps) {
           onChildMouseEnter={handleMarkerHover}
           onChildMouseLeave={handleMarkerUnhover}
           yesIWantToUseGoogleMapApiInternals={true}
+          options={{
+            streetViewControl: true,
+            mapTypeControl: true,
+            fullscreenControl: false,
+          }}
         >
           {session.listings?.map((listing) => (
             <ListingMarker
