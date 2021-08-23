@@ -3,13 +3,13 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import { ListingContext } from "../../Contexts/ListingContext";
 import { AutoCompleteSuggestion, SearchType } from "../../API/Google Places";
 import AddressSearchBar from "../AddressSearchBar/AddressSearchBar";
 import {
   Coordinate,
   geocodeByPlaceId,
 } from "../../API/Google Places/Geocoding";
-import { uuid } from "uuidv4";
 import { useUpdateSession } from "../../Utils/Hooks";
 import SessionData, { Listing } from "../../Models/Session";
 
@@ -18,6 +18,8 @@ export default function EditListingDialog({
   session,
   listing,
 }: IProps) {
+  const { setSelectedListing } = React.useContext(ListingContext);
+
   const updateSessionMutation = useUpdateSession();
 
   const [formData, setFormData] = React.useState<EditListingFormData>({
@@ -50,6 +52,7 @@ export default function EditListingDialog({
         ...session,
         listings: updatedListings,
       });
+      setSelectedListing(updatedListing);
       onClose();
     }
   }
