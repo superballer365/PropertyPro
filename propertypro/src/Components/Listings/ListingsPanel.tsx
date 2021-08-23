@@ -6,7 +6,7 @@ import SessionData from "../../Models/Session";
 import NewListingDialog from "./NewListingDialog";
 import ListingsList from "./ListingsList";
 import { ListingContext } from "../../Contexts/ListingContext";
-import ListingEditor from "./ListingEditor";
+import ListingViewer from "./ListingViewer";
 
 export default function ListingsPanel({ session }: IProps) {
   const { selectedListing } = React.useContext(ListingContext);
@@ -16,7 +16,7 @@ export default function ListingsPanel({ session }: IProps) {
   function getContent() {
     // if we have a selected listing, show it
     if (selectedListing)
-      return <ListingEditor session={session} listing={selectedListing} />;
+      return <ListingViewer session={session} listing={selectedListing} />;
 
     // otherwise, render the list of listings
     return (
