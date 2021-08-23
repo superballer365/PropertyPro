@@ -7,6 +7,7 @@ import { ListingContext } from "../../Contexts/ListingContext";
 import SessionData, { Listing } from "../../Models/Session";
 import { useUpdateSession } from "../../Utils/Hooks";
 import EditListingDialog from "./EditListingDialog";
+import { getAddressComponents } from "../../Utils/address";
 
 export default function ListingViewer({ listing, session }: IProps) {
   const { setSelectedListing } = React.useContext(ListingContext);
@@ -27,6 +28,8 @@ export default function ListingViewer({ listing, session }: IProps) {
     setSelectedListing(undefined);
   }
 
+  getAddressComponents(listing.address);
+
   return (
     <>
       {isEditing && (
@@ -46,16 +49,24 @@ export default function ListingViewer({ listing, session }: IProps) {
         </Card.Header>
         <Card.Body>
           <Row>
-            <Col>Price:</Col>
+            <Col className="col-sm-5">Price:</Col>
             <Col>{"$" + listing.price}</Col>
           </Row>
           <Row>
-            <Col>Bedrooms:</Col>
+            <Col className="col-sm-5">Bedrooms:</Col>
             <Col>{listing.numberOfBedrooms}</Col>
           </Row>
           <Row>
-            <Col>Bathrooms:</Col>
+            <Col className="col-sm-5">Bathrooms:</Col>
             <Col>{listing.numberOfBathrooms}</Col>
+          </Row>
+          <Row>
+            <Col className="col-sm-5">Street:</Col>
+            <Col>{getAddressComponents(listing.address).street}</Col>
+          </Row>
+          <Row>
+            <Col className="col-sm-5">State:</Col>
+            <Col>{getAddressComponents(listing.address).state}</Col>
           </Row>
         </Card.Body>
         <Card.Footer className="d-flex justify-content-end">
