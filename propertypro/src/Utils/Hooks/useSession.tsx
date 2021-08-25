@@ -71,7 +71,7 @@ export function useUpdateSession() {
       return mapUpdateSession(response);
     },
     {
-      onSuccess: () => {
+      onSuccess: (data, variables) => {
         queryClient.invalidateQueries("sessions");
       },
     }
