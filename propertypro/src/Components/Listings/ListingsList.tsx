@@ -46,6 +46,12 @@ function ListingsListItem({ listing }: IListingsListItemProps) {
   const { setSelectedListing, addHoveredListingId, removeHoveredListingId } =
     React.useContext(ListingContext);
 
+  React.useEffect(() => {
+    return () => {
+      removeHoveredListingId(listing.id);
+    };
+  }, []);
+
   function handleClick() {
     setSelectedListing(listing);
   }
